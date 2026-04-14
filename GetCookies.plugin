@@ -1,5 +1,5 @@
 #!name=GetCookies
-#!desc=适用于Loon的获取应用Cookie插件，获取完成后禁用插件，京东获取cookie请进入(浏览器版主页)[https://home.m.jd.com/myJd/newhome.action)]
+#!desc=适用于Loon的获取应用Cookie插件，获取完成后禁用插件。京东获取cookie需要进入浏览器版主页[https://home.m.jd.com/myJd/newhome.action]
 #!author=MinCheng7[https://github.com/MinCheng7]
 #!homepage=https://github.com/MinCheng7/SkyPlugins
 #!icon=https://raw.githubusercontent.com/MinCheng7/icons/refs/heads/other-icons/cookie2.webp
