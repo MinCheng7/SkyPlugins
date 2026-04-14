@@ -17,9 +17,6 @@ http-request ^https:\/\/passport\.iqiyi\.com\/apis\/user\/ script-path=https://r
 # 百度贴吧
 http-request https?:\/\/(c\.tieba\.baidu\.com|180\.97\.\d+\.\d+)\/c\/s\/login script-path=https://raw.githubusercontent.com/NobyDa/Script/master/BDTieBa-DailyBonus/TieBa.js, timeout=60, tag=百度贴吧@NobyDa
 
-# 哔哩哔哩
-http-request ^https?:\/\/app\.bilibili\.com\/x\/resource\/fingerprint\? script-path=https://raw.githubusercontent.com/ClydeTime/BiliBili/main/js/BiliBiliDailyBonus.js, tag=哔哩哔哩@ClydeTime
-
 # 哔哩漫画
 http-request ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/myinfo script-path=https://raw.githubusercontent.com/NobyDa/Script/master/Bilibili-DailyBonus/Manga.js, tag=哔哩漫画@NobyDa
 
