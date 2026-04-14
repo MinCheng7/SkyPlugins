@@ -1,8 +1,8 @@
 #!name=GetCookies
-#!desc=适用于Loon的获取应用Cookie插件
-#!author=MinCheng7(https://github.com/MinCheng7)
+#!desc=适用于Loon的获取应用Cookie插件，获取完成后禁用插件
+#!author=MinCheng7
 #!homepage=https://github.com/MinCheng7/SkyPlugins
-#!icon=https://github.com/MinCheng7/icons/blob/other-icons/cookie2.webp
+#!icon=https://github.com/MinCheng7/icons/blob/other-icons/cookie1.jpg
 #!edit=https://github.com/MinCheng7/SkyPlugins/edit/main/GetCookies.plugin
 
 
