@@ -34,7 +34,7 @@ http-request ^https:\/\/my\.m\.jd\.com script-path=https://raw.githubusercontent
 http-request ^https:\/\/ngabbs.com\/nuke.php\?? script-path=https://raw.githubusercontent.com/chouchoui/QuanX/master/Scripts/nga/nga.cookie.js, requires-body=true, timeout=60, tag=nga.cookie
 
 # 携程旅行
-http-response ^https:\/\/m\.ctrip\.com\/restapi\/soa2\/\d+\/[a-zA-Z]+Login(?:$|\?) script-path=https://raw.githubusercontent.com/NobyDa/Script/master/Ctrip-DailyBonus/Ctrip.js, requires-body=true, tag=携程旅行@NobyDa
+http-request ^https:\/\/m\.ctrip\.com\/restapi\/soa2\/14946\/json\/userBaseInfo script-path=https://raw.githubusercontent.com/barrym-chen/Script/master/ctrip/ctrip_cookie.js, timeout=60, tag=携程@barrym-chen
 
 [MITM]
 hostname = appgw.huazhu.com, ms.jr.jd.com, me-api.jd.com, api.m.jd.com, auth.alipan.com, auth.aliyundrive.com, passport.iqiyi.com, app.bilibili.com, c.tieba.baidu.com, tiebac.baidu.com, api.kkmh.com, m.ctrip.com, home.m.jd.com, un.m.jd.com, sec.m.jd.com, ngabbs.com
