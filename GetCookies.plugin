@@ -19,4 +19,4 @@ http-request ^https:\/\/ms\.jr\.jd\.com\/gw\/generic\/hy\/h5\/m\/appSign\? scrip
 
 
 [MITM]
-hostname = appgw.huazhu.com ,ms.jr.jd.com, me-api.jd.com, api.m.jd.com
+hostname = appgw.huazhu.com, ms.jr.jd.com, me-api.jd.com, api.m.jd.com
