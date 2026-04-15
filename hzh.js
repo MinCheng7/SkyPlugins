@@ -1,6 +1,6 @@
 /*
 【华住会签到】作者:@Mincheng7
-原作者:@evilbutcher, @Moli-X
+修改来源:@evilbutcher, @Moli-X
 https://raw.githubusercontent.com/evilbutcher/QuantumultX/main/check_in/hzh/hzh.js
 
 
@@ -16,7 +16,7 @@ https://raw.githubusercontent.com/evilbutcher/QuantumultX/main/check_in/hzh/hzh.
 
 
 【使用说明】
-手动签到获取Cookie即可使用。
+进入华住会app的会员-签到页面获取Cookie。
 
 【Surge】
 -----------------
@@ -162,7 +162,11 @@ function getCookie() {
     $.log(cookie);
     $.write(cookie, "evil_hzhCookie");
     
-    const usertoken = $request.headers["User-Token"] || $request.headers["user-token"];
+    let usertoken = $request.headers["User-Token"] || $request.headers["user-token"];
+if (!usertoken && cookie) {
+    const match = cookie.match(/userToken=([^; ]+)/);
+    if (match) usertoken = match[1];
+}
     $.log(usertoken);
     $.write(usertoken, "evil_hzhUserToken");
   
