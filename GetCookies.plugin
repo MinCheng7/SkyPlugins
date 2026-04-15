@@ -8,7 +8,7 @@
 [Argument]
 aliyun = switch,false,tag=[阿里云盘] @Sliverkiss/@lowking,desc=是否启用此处修改
 bdtb = switch,false,tag=[百度贴吧] @blackmatrix7,desc=是否启用此处修改
-bili = switch,false,tag=[哔哩哔哩] 二维码@ClydeTime,desc=是否启用此处修改
+bili = switch,false,tag=[哔哩哔哩] 二维码@Mincheng7,desc=是否启用此处修改
 hzh = switch,false,tag=[华住会] @MinCheng7,desc=是否启用此处修改
 qmkg = switch,false,tag=[全民k歌] @chavyleung,desc=是否启用此处修改
 ctrip = switch,false,tag=[携程旅行] @NobyDa,desc=是否启用此处修改
@@ -26,7 +26,7 @@ http-request ^https?:\/\/tiebac\.baidu\.com\/c\/u\/follow\/getFoldedMessageUserI
 http-request ^https?:\/\/tiebac\.baidu\.com\/c\/s\/getClientConfig script-path=https://gist.githubusercontent.com/blackmatrix7/cebabe7a385fc6a9ad32e2f7a35851dc/raw/1363d8720c92267d0a97fcd8eb98673760891fc9/tieba_min.js,tag=百度贴吧4@blackmatrix7, enable={bdtb}
 
 # 哔哩哔哩
-http-response ^https?:\/\/app\.bilibili\.com\/x\/resource\/fingerprint\? script-path=https://raw.githubusercontent.com/ClydeTime/BiliBili/main/js/BiliBiliDailyBonus.js, requires-body=true, timeout=30, tag=哔哩哔哩QR@ClydeTime, enable={bili}
+http-response ^https?:\/\/app\.bilibili\.com\/x\/resource\/fingerprint\? script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliDailyBonus.js, requires-body=true, timeout=30, tag=哔哩哔哩QR@Mincheng7, enable={bili}
 
 # 华住会
 http-request https:\/\/appgw\.huazhu\.com\/game\/sign_header tag=华住会@Mincheng7, script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js, requires-body=false, timeout=30, enable={hzh}
