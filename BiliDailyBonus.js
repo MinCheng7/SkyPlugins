@@ -17,7 +17,7 @@
 Loon 配置:
 # BiliDailyBonus 「在插件中添加」
 https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliDailyBonus.plugin
-
+************************
 1.获取cookie
 	Ⅰ. 后台退出手机B站客户端的情况下, 重新打开APP进入主页, 保持脚本常驻确保cookie不过期(已失效)
 	Ⅱ. 扫码方式获得长期cookie, 获取后关闭脚本.
@@ -28,6 +28,11 @@ https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliDaily
 	如果不想投币, 在插件里把每日投币数改为0即可 
 3.执行时间设置
 	脚本执行的参数填写标准的 Cron 表达式。例如 "40 7 * * *" 表示每天早上 7:40 执行，依次为 "分 时 天 月 年"。
+************************
+# BoxJS订阅地址：
+	https://raw.githubusercontent.com/ClydeTime/BiliBili/main/boxjs/BiliBili.boxjs.json
+	更新时间：2025-05-15
+
 */
 
 const format = (ts, fmt = 'yyyy-MM-dd HH:mm:ss') => {
