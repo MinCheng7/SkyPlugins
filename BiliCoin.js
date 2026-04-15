@@ -81,7 +81,8 @@ function get_cookie() {
         
         // 2. 判空：如果当前请求头中没有 Cookie，直接结束函数，避免后面 match 报错
         if (!CookieValue) {
-            console.log($.name + " ⚠️ 当前请求未包含 Cookie 字段，跳过。");
+            console.log($.name + "⚠️当前请求未包含 Cookie 字段");
+            $.msg($.name, "⚠️当前请求未包含 Cookie 字段", "", $.opts)
             return;
         }
 
@@ -91,7 +92,8 @@ function get_cookie() {
 
         if (!cookieM) {
             // 如果有 Cookie 但匹配不到关键信息，记录日志
-            console.log($.name + " 🍪 Cookie匹配失败 ❌\n内容: " + CookieValue);
+            console.log($.name + "🍪Cookie匹配失败 ❌\n内容: " + CookieValue);
+            $.msg($.name, "🍪Cookie匹配失败 ❌\n内容: ", "", $.opts)
         } else {
             // 4. 写入逻辑
             if ($.getdata(CookieKey) != null) {
@@ -103,11 +105,12 @@ function get_cookie() {
             } else {
                 $.setdata(CookieValue, CookieKey);
             }
-            console.log($.name + " 🍪 Cookie写入成功 🎉 " + cookieM);
-            $.msg($.name, "🍪 Cookie写入成功 🎉", "", $.opts);
+            console.log($.name + "🍪Cookie写入成功🎉" + cookieM);
+            $.msg($.name, "🍪Cookie写入成功🎉", "", $.opts);
         }
     } catch (error) {
-        console.log($.name + " 写入失败: " + error);
+        console.log($.name + "写入失败:" + error);
+        $.msg($.name, "写入失败:", "", $.opts);
     }
 }
 
