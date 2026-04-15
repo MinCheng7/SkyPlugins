@@ -158,12 +158,14 @@ function getCookie() {
     $request.method != "OPTIONS" &&
     $request.url.match(/game\/sign_header/)
   ) {
-    const cookie = $request.headers["Cookie"];
+    const cookie = $request.headers["Cookie"] || $request.headers["cookie"];
     $.log(cookie);
     $.write(cookie, "evil_hzhCookie");
-    const usertoken = $request.headers["User-Token"];
+    
+    const usertoken = $request.headers["User-Token"] || $request.headers["user-token"];
     $.log(usertoken);
     $.write(usertoken, "evil_hzhUserToken");
+  
     $.notify("华住会", "", "获取签到Cookie成功🎉");
   }
 }
