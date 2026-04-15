@@ -1,6 +1,7 @@
 #!name=BiliDailyBonus
-#!desc=哔哩哔哩每日签到和任务
-#!author=MinCheng7[https://github.com/MinCheng7], ClydeTime[https://github.com/ClydeTime]
+#!desc=哔哩哔哩每日签到和大会员任务
+#!author=MinCheng7[https://github.com/MinCheng7], ClydeTime[https://github.com/ClydeTime]  
+#!作者=MinCheng7[https://github.com/MinCheng7], ClydeTime[https://github.com/ClydeTime]
 #!homepage=https://github.com/MinCheng7/SkyPlugins
 #!icon=https://raw.githubusercontent.com/MinCheng7/icons/refs/heads/other-icons/2233-2.jpg
 
@@ -13,7 +14,7 @@ ChargeMid = input, "", tag=充电用户ID, desc=被充电用户的UID，不填�
 ChargeBP = input, "5", tag=充电B币数, desc=每次充电消耗的B币数量(1-50)
 
 [Script]
-cron "{RunTime}" script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliDailyBonus.js, timeout=15, tag=B站每日任务@MinCheng7
+cron "{RunTime}" script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliDailyBonus.js, timeout=15, tag=Bilibili每日任务@MinCheng7
 
 
 
