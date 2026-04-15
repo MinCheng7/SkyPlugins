@@ -136,16 +136,16 @@ async function getCookie() {
 }
 
 async function signBiliBili() {
-	if (config.cookie && await me()) {
-		await queryStatus()
+		if (config.cookie && await me()) {
+				await queryStatus()
+				
+				// 新增：优先读取 Loon 插件面板设置的投币数量，如果未设置则默认取 BoxJS 或 5
+				const coinNumArg = $.getItem("CoinNum");
+				const exec_times = (coinNumArg !== undefined && coinNumArg !== null && coinNumArg !== "") 
+						? Number(coinNumArg) 
+						: Number(config.Settings?.exec ?? 5);
 		
-		// 新增：优先读取 Loon 插件面板设置的投币数量，如果未设置则默认取 BoxJS 或 5
-		const coinNumArg = $.getItem("CoinNum");
-		const exec_times = (coinNumArg !== undefined && coinNumArg !== null && coinNumArg !== "") 
-			? Number(coinNumArg) 
-			: Number(config.Settings?.exec ?? 5);
-
-		const real_times = Math.max(0, exec_times - (Number(config.coins.num) / 10))
+				const real_times = Math.max(0, exec_times - (Number(config.coins.num) / 10))
 		let flag = isNotComplete(exec_times)
 		if (flag){
 			await dynamic()
