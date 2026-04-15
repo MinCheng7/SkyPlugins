@@ -6,7 +6,7 @@
 #!edit=https://github.com/MinCheng7/SkyPlugins/edit/main/GetCookies.plugin
 
 [Argument]
-B站Cookie获取方式只能开启一种
+bp_info = label, "💡 说明：B站Cookie获取方式只能开启一种"
 扫码Cookie = switch,true,tag=[B站] 扫码Cookie,desc=是否启用此处修改
 APPCookie = switch,false,tag=[B站] APPCookie,desc=是否启用此处修改
 
