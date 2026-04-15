@@ -9,4 +9,4 @@
 解决了华住会获取cookie时的usertoken空白问题
 
 
-致谢：[莫离](https://github.com/Moli-X)，[NobyDa](https://github.com/NobyDa)，[evilbutcher](https://github.com/evilbutcher)，[奶思](https://github.com/fmz200)，[MartinsKing](https://github.com/clydetime)（排名不分先后）  
+致谢：[evilbutcher](https://github.com/evilbutcher)丨[MartinsKing](https://github.com/clydetime)丨[莫离](https://github.com/Moli-X)丨[奶思](https://github.com/fmz200)丨[NobyDa](https://github.com/NobyDa)（首字母排序）  
