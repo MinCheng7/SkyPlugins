@@ -32,7 +32,7 @@ hostname= m.bilibili.com, api.bilibili.com
 ####################
 # Loon
 [Script]
-http-request ^https:\/\/(m|api)\.bilibili\.com\/(x\/v\d\/history\/shadow|service-worker).* script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliCoin.js, timeout=10, tag=BiliCookie@MinCheng7
+http-request ^https:\/\/api\.bilibili\.com\/x\/v2\/.* script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliCoin.js, timeout=10, tag=BiliCookie@MinCheng7
 cron "25 15 * * *" script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliCoin.js,tag=BiliCoin@Mincheng7
 ####################
 
