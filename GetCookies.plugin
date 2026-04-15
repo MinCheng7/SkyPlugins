@@ -14,9 +14,6 @@ http-response ^https:\/\/auth.aliyundrive.com\/v2\/account\/token script-path=ht
 # 百度贴吧
 http-request https?:\/\/(c\.tieba\.baidu\.com|180\.97\.\d+\.\d+)\/c\/s\/login script-path=https://raw.githubusercontent.com/NobyDa/Script/master/BDTieBa-DailyBonus/TieBa.js, timeout=60, tag=百度贴吧@NobyDa
 
-# 哔哩漫画
-http-request ^https:\/\/app\.bilibili\.com\/x\/v2\/account\/myinfo script-path=https://raw.githubusercontent.com/NobyDa/Script/master/Bilibili-DailyBonus/Manga.js, tag=哔哩漫画@NobyDa
-
 # 华住会
 http-request https:\/\/appgw\.huazhu\.com\/game\/sign_header tag=华住会@Moli-X, script-path=https://github.com/Moli-X/Resources/raw/main/Script/Hzh.js, requires-body=false, img-url=https://raw.githubusercontent.com/evilbutcher/Quantumult_X/master/picture/hzh.png
 
@@ -27,11 +24,11 @@ http-request ^https:\/\/ms\.jr\.jd\.com\/gw\/generic\/hy\/h5\/m\/appSign\? scrip
 http-request ^https:\/\/home\.m\.jd\.com\/myJd\/(newhome|home)\.action script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/jingdong/jd_cookie.js, timeout=60, tag=京东1@fmz200
 http-request ^https:\/\/my\.m\.jd\.com script-path=https://raw.githubusercontent.com/fmz200/wool_scripts/main/Scripts/jingdong/jd_cookie.js, timeout=60, tag=京东2@fmz200
 
-#全民k歌
+# 全民k歌
 http-request ^https://node\.kg\.qq\.com/webapp/proxy? script-path=https://raw.githubusercontent.com/chavyleung/scripts/master/qmkg/qmkg.cookie.js, requires-body=true, tag=全民k歌@chavyleung
 
 # 携程旅行
 http-response ^https:\/\/m\.ctrip\.com\/restapi\/soa2\/\d+\/[a-zA-Z]+Login(?:$|\?) script-path=https://raw.githubusercontent.com/NobyDa/Script/master/Ctrip-DailyBonus/Ctrip.js, requires-body=true, tag=携程旅行@NobyDa
 
 [MITM]
-hostname = appgw.huazhu.com, ms.jr.jd.com, me-api.jd.com, api.m.jd.com, auth.alipan.com, auth.aliyundrive.com, app.bilibili.com, c.tieba.baidu.com, tiebac.baidu.com, api.kkmh.com, m.ctrip.com, home.m.jd.com, un.m.jd.com, sec.m.jd.com, node.kg.qq.com
+hostname = appgw.huazhu.com, hweb-mbf.huazhu.com, ms.jr.jd.com, me-api.jd.com, api.m.jd.com, auth.alipan.com, auth.aliyundrive.com, c.tieba.baidu.com, tiebac.baidu.com, api.kkmh.com, m.ctrip.com, home.m.jd.com, un.m.jd.com, sec.m.jd.com, node.kg.qq.com
