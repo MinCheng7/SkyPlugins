@@ -1,6 +1,6 @@
 /*
 作者: @MinCheng7
-感谢 @chavyleung @cyubuchen
+修改来源: @chavyleung @cyubuchen
 
 ####################
 [免责声明]
@@ -32,27 +32,10 @@ hostname= m.bilibili.com, api.bilibili.com
 ####################
 # Loon
 [Script]
-http-request ^https:\/\/(m|api)\.bilibili\.com\/(x\/v\d\/history\/shadow|service-worker).* script-path=https://raw.githubusercontent.com/cyubuchen/scripts/master/cookie/bilibiliCoins.js, timeout=10, tag=bilibiliCoinsCookie
-cron "25 15 * * *" script-path=https://raw.githubusercontent.com/cyubuchen/scripts/master/task/bilibiliCoins.js,tag=bilibiliCoins
+http-request ^https:\/\/(m|api)\.bilibili\.com\/(x\/v\d\/history\/shadow|service-worker).* script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliCoin.js, timeout=10, tag=BiliCookie@MinCheng7
+cron "25 15 * * *" script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliCoin.js,tag=BiliCoin@Mincheng7
 ####################
 
-####################
-# Surge
-[Script]
-# bilibiliCoins
-bilibiliCoinsCookie = type=http-request,pattern=^https:\/\/(m|api)\.bilibili\.com\/(x\/v\d\/history\/shadow|service-worker).*,script-path=https://raw.githubusercontent.com/cyubuchen/scripts/master/cookie/bilibiliCoins.js
-bilibiliCoins = type=cron,cronexp="25 15 * * *",script-path=https://raw.githubusercontent.com/cyubuchen/scripts/master/task/bilibiliCoins.js
-####################
-
-####################
-# Quantumult X 商店版
-# 复制一份本脚本至本地, 文件名设为bilibiliCoins
-[rewrite_local]
-;bilibili Cookie
-^https:\/\/(m|api)\.bilibili\.com\/(x\/v\d\/history\/shadow|service-worker).* url script-request-header bilibiliCoins.js
-[task_local]
-25 15 * * * bilibiliCoins.js, enabled=true
-####################
 */
 
 const $ = Env("💰bilibiliCoins");
