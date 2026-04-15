@@ -1,10 +1,9 @@
 /*
 哔哩哔哩每日任务和奖励
 更新时间: 2026-04-15
-脚本兼容: QuantumultX, Surge, Loon
-脚本作者: @Mincheng7, 原作者: MartinsKing(@ClydeTime)
-软件功能: 登录/观看/分享/投币/直播签到/银瓜子转硬币/大会员积分签到/年度大会员每月B币券+等任务
-改进内容：满级用户不再提示升级相关通知。
+作者: @Mincheng7, 原作者: MartinsKing(@ClydeTime)
+功能: 登录/观看/分享/投币/直播签到/银瓜子转硬币/大会员积分签到/年度大会员每月B币券/等级任务
+改进内容：插件内配置丨通知样式调整丨满级用户不再提示升级相关通知丨...
 注意事项:
 	抓取cookie时注意保证账号登录状态;
 	账号内须有一定数量的关注数，否则无法完成投币;
@@ -15,24 +14,20 @@
 使用声明: ⚠️此脚本仅供学习与交流，请勿贩卖！⚠️
 脚本参考: @Nobyda, @Wyatt1026, @ABreadTree, @chavyleung, @SocialSisterYi, @catlair  
 ************************
-Loon说明：
-************************
+Loon 配置:
+# BiliDailyBonus 「在插件中添加」
+https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliDailyBonus.plugin
+
 1.获取cookie
 	Ⅰ. 后台退出手机B站客户端的情况下, 重新打开APP进入主页, 保持脚本常驻确保cookie不过期(已失效)
 	Ⅱ. 扫码方式获得长期cookie, 获取后关闭脚本.
 	如通知成功获取cookie, 则可以使用此签到脚本.
-	脚本默认在每天上午7点40执行.
+	脚本默认在每天上午7点40执行.如需要更改，在插件里自行设置，
 2.投币设置
 	定时任务脚本投币规则为: 随机获取关注列表Up主视频, 默认5视频5硬币, 不点赞.
 	如果不想投币, 在插件里把每日投币数改为0即可 
-
-************************
-Loon 配置:
-************************
-# BiliDailyBonus 「在插件中添加」
-https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliDailyBonus.plugin
-
-
+3.执行时间设置
+	脚本执行的参数填写标准的 Cron 表达式。例如 "40 7 * * *" 表示每天早上 7:40 执行，依次为 "分 时 天 月 年"。
 */
 
 const format = (ts, fmt = 'yyyy-MM-dd HH:mm:ss') => {
