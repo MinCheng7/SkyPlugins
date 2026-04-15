@@ -19,7 +19,7 @@ http-request ^https?:\/\/tiebac\.baidu\.com\/c\/u\/follow\/getFoldedMessageUserI
 http-request ^https?:\/\/tiebac\.baidu\.com\/c\/s\/getClientConfig script-path=https://gist.githubusercontent.com/blackmatrix7/cebabe7a385fc6a9ad32e2f7a35851dc/raw/1363d8720c92267d0a97fcd8eb98673760891fc9/tieba_min.js,tag=百度贴吧4@blackmatrix7
 
 # 哔哩哔哩
-http-request ^https:\/\/(m|api)\.bilibili\.com\/(x\/v\d\/history\/shadow|service-worker).* script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliCoin.js, timeout=10, tag=哔哩哔哩@MinCheng7
+http-request ^https:\/\/api\.bilibili\.com\/x\/v2\/.* script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliCoin.js, timeout=10, tag=哔哩哔哩@MinCheng7
 
 # 华住会
 http-request https:\/\/appgw\.huazhu\.com\/game\/sign_header tag=华住会@Mincheng7, script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js, requires-body=false, img-url=https://raw.githubusercontent.com/evilbutcher/Quantumult_X/master/picture/hzh.png
