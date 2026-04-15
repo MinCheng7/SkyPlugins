@@ -155,18 +155,18 @@ async function signBiliBili() {
 				short_link = encodeURIComponent(card?.short_link_v2.replace(/\\\//g, '/'))
 				await watch(item.desc.rid, item.desc.bvid, card.cid)
 				
-				// 1. 观看后等待 2 秒
-				$.log("  ⏳ 等待 2 秒后分享...")
-				await $.wait(2000)
+				// 1. 观看后等待 1 秒
+				$.log("  ⏳ 等待 1 秒后分享...")
+				await $.wait(1000)
 				
 				await share(item.desc.rid, card.cid, short_link)
 			} else {
 				$.log("❌ 获取视频失败,请重试或寻求帮助")
 			}
 			
-			// 2. 分享后等待 3 秒进入投币
-			$.log("  ⏳ 等待 3 秒后进入投币...")
-			await $.wait(3000)
+			// 2. 分享后等待 1 秒进入投币
+			$.log("  ⏳ 等待 1 秒后进入投币...")
+			await $.wait(1000)
 
 			$.log("3️⃣ 投币任务")
 			config.coins?.failures > 0 && (config.coins.failures = 0)//重置投币失败次数
@@ -175,10 +175,10 @@ async function signBiliBili() {
 			} else {
 				for (let i = 0; i < real_times && (Math.floor(config.user.money) > 5 || ($.log("- 硬币不足,投币失败"), false)); i++) {
 					await coin()
-					// 3. 如果需要投多个币，每次投币之间也间隔 5 秒 (最后一次投币后不等待)
+					// 3. 如果需要投多个币，每次投币之间也间隔 0.1 秒 (最后一次投币后不等待)
 					if (i < real_times - 1) {
-						$.log("  ⏳ 等待 3 秒后继续投币...")
-						await $.wait(3000)
+						$.log("  ⏳ 等待 0.1 秒后继续投币...")
+						await $.wait(100)
 					}
 				}
 			}
@@ -196,7 +196,7 @@ async function signBiliBili() {
 		}
 		let vipMessage = ''
 		if (config.user.vipStatus === 1) {
-			$.log("\n---- 🧾开始大会员额外任务 ----")
+			$.log("\n---- 🧾 开始大会员额外任务 ----\n")
 			const experience = await vipExtraExStatus()
 			let vipExtraExRet = false
 			experience === 0 ? $.log("❌ 大会员额外经验领取情况查询失败")
@@ -220,7 +220,7 @@ async function signBiliBili() {
 			if (!commonTaskItem) {//查询失败直接梭哈
 				for (let t in tasks) tasks[t].success = await tasks[t].fn()
 			} else {
-				for (let t in tasks) commonTaskItem.find(i => i.task_code === tasks[t].code)?.state !== 3 ? tasks[t].success = ($.log(`#### 执行${tasks[t].title}任务`), await tasks[t].fn()) : ($.log(`- 今日${tasks[t].title}任务已完成`), tasks[t].success = true)
+				for (let t in tasks) commonTaskItem.find(i => i.task_code === tasks[t].code)?.state !== 3 ? tasks[t].success = ($.log(`开始${tasks[t].title}`), await tasks[t].fn()) : ($.log(`✅ 今日${tasks[t].title}任务已完成`), tasks[t].success = true)
 			}
 			const unfinishedTask = tasks.filter(task => !task.success).map(task => task.title)
 			let taskMessage = unfinishedTask.join(', ')
@@ -576,7 +576,7 @@ async function getFavAid(arr) {
 				let vlist = body.data?.list?.vlist
 				let random_v_int = Math.floor((Math.random() * vlist.length))
 				let aid = vlist[random_v_int]?.aid
-				$.log("🧑‍💻 作者: " + vlist[random_v_int]['author'] + "; 视频标题: " + vlist[random_v_int]['title'])
+				$.log("🧑‍💻 作者: " + vlist[random_v_int]['author'] + "\n   视频标题: " + vlist[random_v_int]['title'])
 				return aid
 			} else {
 				$.log("❌ 获取投币视频失败，" + body?.message)
@@ -592,7 +592,7 @@ async function getFavAid(arr) {
 }
 
 async function silver2coin() {
-	$.log("\n---- 🪙 银瓜子兑换硬币任务 ----")
+	$.log("\n---- 🪙 银瓜子兑换硬币任务 ----\n")
 	const body = {
 		csrf: config.cookie.bili_jct,
 		csrf_token: config.cookie.bili_jct
@@ -609,16 +609,16 @@ async function silver2coin() {
 			const body = $.toObj(response.body)
 			// 兑换成功
 			if (body && body.code === 0) {
-				$.log(`✅成功兑换: ${body.data.coin}个硬币`)
+				$.log(`✅ 成功兑换: ${body.data.coin}个硬币`)
 				$.log(`当前银瓜子: ${body.data.silver} , 当前金瓜子: ${body.data.gold}`)
 			}
 			// 兑换中止（重复兑换&银瓜子不足）
 			else if (body && body.code === 403) {
-				$.log("❌未成功兑换，" + body?.message)
+				$.log("❌ 未成功兑换，" + body?.message)
 			}
 			// 兑换失败
 			else {
-				let subTitle = "❌兑换失败"
+				let subTitle = "❌ 兑换失败"
 				let detail = ` ${body.message}`
 				$.log(subTitle + ", " + detail)
 			}
@@ -640,12 +640,12 @@ async function liveSign() {
 		try {
 			const body = $.toObj(response.body)
 			if (body?.code === 0) {
-				$.log("✅签到成功")
+				$.log("✅ 签到成功")
 				$.log(`签到奖励:${body.data.text},连续签到${body.data.hadSignDays}天`)
 			} else if (body && body.code === 1011040){
-				$.log("✅今日已完成")
+				$.log("✅ 今日已完成")
 			} else {
-				$.log("❌签到失败，" + body?.message)
+				$.log("❌ 签到失败，" + body?.message)
 			}
 		} catch (e) {
 			$.logErr(e, response)
@@ -705,7 +705,7 @@ async function vipExtraExStatus() {
 }
 
 async function vipExtraEx() {
-	$.log("\n---- 🫅 大会员每日额外经验值 ----")
+	$.log("\n---- 🫅 大会员每日额外经验值 ----\n")
 	const body = {
 		csrf: config.cookie.bili_jct,
 		ts: $.getTimestamp(),
@@ -945,7 +945,7 @@ async function bigScoreOgvWatchMaterial(season_id, epid) {
 		try {
 			const body = $.toObj(response.body)
 			if (body?.code === 0 && body?.message === "success") {
-				$.log("⏳ 任务计时开始,等待十分钟...")
+				$.log("⏳ 任务计时开始,等待十分钟")
 				return body.data.watch_count_down_cfg
 			} else {
 				$.log("❌ 任务计时失败，" + body?.message)
