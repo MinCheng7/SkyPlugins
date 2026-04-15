@@ -1,13 +1,15 @@
 #!name=GetCookies
-#!desc=获取应用Cookie的插件，获取完成后禁用插件。请勿把个人Cookie告知他人。B站Cookie获取方式只能开启一种。
+#!desc=获取应用Cookie的插件，获取完成后禁用插件。请勿把个人Cookie告知他人。
 #!author=MinCheng7[https://github.com/MinCheng7]
 #!homepage=https://github.com/MinCheng7/SkyPlugins
 #!icon=https://raw.githubusercontent.com/MinCheng7/icons/refs/heads/other-icons/cookie2.webp
 #!edit=https://github.com/MinCheng7/SkyPlugins/edit/main/GetCookies.plugin
 
 [Argument]
-扫码Cookie = switch,false,tag=[B站] 扫码Cookie,desc=是否启用此处修改
-APPCookie = switch,true,tag=[B站] APPCookie,desc=是否启用此处修改
+B站Cookie获取方式只能开启一种
+扫码Cookie = switch,true,tag=[B站] 扫码Cookie,desc=是否启用此处修改
+APPCookie = switch,false,tag=[B站] APPCookie,desc=是否启用此处修改
+
 
 [Script]
 # 阿里云盘
