@@ -3,7 +3,7 @@
 更新时间: 2026-04-15
 作者: @Mincheng7, 原作者: MartinsKing(@ClydeTime)
 功能: 登录/观看/分享/投币/直播签到/银瓜子转硬币/大会员积分签到/年度大会员每月B币券/等级任务
-改进内容：插件内配置丨通知样式调整丨满级用户不再提示升级相关通知丨...
+改进内容：插件内配置，无需依赖BoxJS丨通知样式调整丨满级用户不再提示升级相关通知丨...
 注意事项:
 	抓取cookie时注意保证账号登录状态;
 	账号内须有一定数量的关注数，否则无法完成投币;
@@ -29,9 +29,6 @@ https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliDaily
 3.执行时间设置
 	脚本执行的参数填写标准的 Cron 表达式。例如 "40 7 * * *" 表示每天早上 7:40 执行，依次为 "分 时 天 月 年"。
 ************************
-# BoxJS订阅地址：
-	https://raw.githubusercontent.com/ClydeTime/BiliBili/main/boxjs/BiliBili.boxjs.json
-	更新时间：2025-05-15
 
 */
 
@@ -290,7 +287,7 @@ async function signBiliBili() {
 
 //目前只循环三次，也可设置多次
 async function waitConfirmLoop(times, login_confirm, qrCode) {
-	if (times >= 3) return $.msg("❌扫码确认失败！")
+	if (times >= 3) return $.msg("❌ 扫码确认失败！")
 	if (login_confirm) return
 	await $.wait(5000)
 	await waitConfirmLoop(++times, await loginConfirm(qrCode), qrCode)
@@ -360,12 +357,12 @@ async function loginConfirm(auth_code) {
 				case 86038:
 					$.msg("❌ 二维码已失效")
 					return false
-				case 86039:
-					$.msg("❗ 二维码尚未确认")
-					return false
-				case 86090:
-					$.msg("❗ 已扫码未确认")
-					return false
+				//case 86039:
+				//	$.msg("❗ 二维码尚未确认")
+				//	return false
+				//case 86090:
+				//	$.msg("❗ 已扫码未确认")
+				//	return false
 				default:
 					return false
 			}
@@ -632,7 +629,7 @@ async function silver2coin() {
 }
 
 async function liveSign() {
-	$.log("\n---- ✍️直播签到任务 ----")
+	$.log("\n---- ✍️ 直播签到任务 ----")
 	const myRequest = {
 		url: "https://api.live.bilibili.com/xlive/web-ucenter/v1/sign/DoSign",
 		headers: {
@@ -708,7 +705,7 @@ async function vipExtraExStatus() {
 }
 
 async function vipExtraEx() {
-	$.log("\n---- 🫅大会员每日额外经验值 ----")
+	$.log("\n---- 🫅 大会员每日额外经验值 ----")
 	const body = {
 		csrf: config.cookie.bili_jct,
 		ts: $.getTimestamp(),
@@ -1081,7 +1078,7 @@ async function Charge(mid, bp_num) {
 }
 
 async function me() {
-	$.log("\n---- 👤用户信息 ----")
+	$.log("\n---- 👤 用户信息 ----")
 	const myRequest = {
 		url: 'https://api.bilibili.com/x/web-interface/nav',
 		headers: {
@@ -1109,13 +1106,13 @@ async function me() {
 			
 
 				if (config.user.vipStatus === 1) {
-    				$.log("👑 尊贵的" + config.user.vip_label.text + "「" + config.user.uname + "」")
+    				$.log("🫅 尊贵的" + config.user.vip_label.text + "「" + config.user.uname + "」")
 					$.log("🪪 ID: " + config.user.mid)
-    				$.log("您的大会员有效期至：" + format(config.user.vipDueDate, 'yyyy-MM-dd'))
+    				$.log("👑大会员有效期至：" + format(config.user.vipDueDate, 'yyyy-MM-dd'))
 				}
 				$.log("🪙 硬币: " + Math.floor(config.user.money))
 				$.log("💴 B币: " + config.user.wallet.bcoin_balance)
-				$.log("📈 等级: Level " + config.user.level_info.current_level)
+				$.log("📈 等级: Lv " + config.user.level_info.current_level)
 
 				// 判断是否满级，满级则精简日志
 				if (config.user.level_info.current_level < 6) {
@@ -1130,7 +1127,7 @@ async function me() {
 				$.log(`💰 剩余硬币最多可投: ${Math.floor((config.user.money)/5)}天`)
 
 				if (config.user.level_info.current_level < 6) {
-					$.log("- 距离满级最快还需: " + Math.max(0, Math.ceil(config.user.v6_exp / 65)) + "天(日常 + 投币*5)")
+					$.log("⭐ 距离满级最快还需: " + Math.max(0, Math.ceil(config.user.v6_exp / 65)) + "天(日常 + 投币*5)")
 				}
 
 				return true
@@ -1146,7 +1143,7 @@ async function me() {
 }
 
 async function queryStatus() {
-	$.log("\n---- 📝任务进行状况 ----")
+	$.log("\n---- 📝 任务情况 ----")
 	const myRequest = {
 			url: "https://api.bilibili.com/x/member/web/exp/reward",
 			headers: {
