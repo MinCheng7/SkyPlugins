@@ -1,10 +1,13 @@
 #!name=GetCookies
-#!desc=适用于Loon的获取应用Cookie插件，获取完成后禁用插件。为了你的信息安全，请不要把Cookie告知给他人
+#!desc=获取应用Cookie的插件，获取完成后禁用插件。请勿把个人Cookie告知他人。B站Cookie获取方式只能开启一种。
 #!author=MinCheng7[https://github.com/MinCheng7]
 #!homepage=https://github.com/MinCheng7/SkyPlugins
 #!icon=https://raw.githubusercontent.com/MinCheng7/icons/refs/heads/other-icons/cookie2.webp
 #!edit=https://github.com/MinCheng7/SkyPlugins/edit/main/GetCookies.plugin
 
+[Argument]
+扫码Cookie = switch,false,tag=[B站] 扫码Cookie,desc=是否启用此处修改
+APPCookie = switch,true,tag=[B站] APPCookie,desc=是否启用此处修改
 
 [Script]
 # 阿里云盘
@@ -19,7 +22,8 @@ http-request ^https?:\/\/tiebac\.baidu\.com\/c\/u\/follow\/getFoldedMessageUserI
 http-request ^https?:\/\/tiebac\.baidu\.com\/c\/s\/getClientConfig script-path=https://gist.githubusercontent.com/blackmatrix7/cebabe7a385fc6a9ad32e2f7a35851dc/raw/1363d8720c92267d0a97fcd8eb98673760891fc9/tieba_min.js,tag=百度贴吧4@blackmatrix7
 
 # 哔哩哔哩
-http-request ^https:\/\/api\.bilibili\.com\/x\/v2\/.* script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliCoin.js, timeout=10, tag=哔哩哔哩@MinCheng7
+http-response ^https?:\/\/app\.bilibili\.com\/x\/resource\/fingerprint\? script-path=BiliDailyBonus.js, requires-body=true, tag=bilibili_cookie, timeout=20, tag=哔哩哔哩QR@ClydeTime, enable={扫码Cookie}
+http-request ^https?:\/\/app\.bilibili\.com\/x\/resource\/fingerprint\? script-path=https://raw.githubusercontent.com/ClydeTime/BiliBili/main/js/BiliBiliDailyBonus.js, tag=哔哩哔哩App@ClydeTime, enable={APPCookie}
 
 # 华住会
 http-request https:\/\/appgw\.huazhu\.com\/game\/sign_header tag=华住会@Mincheng7, script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js, requires-body=false, img-url=https://raw.githubusercontent.com/evilbutcher/Quantumult_X/master/picture/hzh.png
@@ -34,4 +38,4 @@ http-request ^https://node\.kg\.qq\.com/webapp/proxy? script-path=https://raw.gi
 http-response ^https:\/\/m\.ctrip\.com\/restapi\/soa2\/\d+\/[a-zA-Z]+Login(?:$|\?) script-path=https://raw.githubusercontent.com/NobyDa/Script/master/Ctrip-DailyBonus/Ctrip.js, requires-body=true, tag=携程旅行@NobyDa
 
 [MITM]
-hostname = appgw.huazhu.com, hweb-mbf.huazhu.com, ms.jr.jd.com, me-api.jd.com, api.m.jd.com, auth.alipan.com, auth.aliyundrive.com, c.tieba.baidu.com, tiebac.baidu.com, api.kkmh.com, m.ctrip.com, home.m.jd.com, un.m.jd.com, sec.m.jd.com, node.kg.qq.com, m.bilibili.com, api.bilibili.com, *.bilibili.com
+hostname = appgw.huazhu.com, hweb-mbf.huazhu.com, ms.jr.jd.com, me-api.jd.com, api.m.jd.com, auth.alipan.com, auth.aliyundrive.com, c.tieba.baidu.com, tiebac.baidu.com, api.kkmh.com, m.ctrip.com, home.m.jd.com, un.m.jd.com, sec.m.jd.com, node.kg.qq.com, m.bilibili.com, api.bilibili.com, app.bilibili.com
