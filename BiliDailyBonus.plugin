@@ -2,10 +2,14 @@
 #!desc=哔哩哔哩每日签到和任务
 #!author=MinCheng7[https://github.com/MinCheng7], ClydeTime[https://github.com/ClydeTime]
 #!homepage=https://github.com/MinCheng7/SkyPlugins
-#!icon=https://raw.githubusercontent.com/MinCheng7/icons/refs/heads/other-icons/2233.jpg
+#!icon=https://raw.githubusercontent.com/MinCheng7/icons/refs/heads/other-icons/2233-2.jpg
 
 [Argument]
-CoinNum = select, "5", "4", "3", "2", "1", "0", tag=[设置] 每日投币数量, desc=选择每日需要自动投币的数量，选0则仅签到不投币。
+CoinNum = select, "5", "4", "3", "2", "1", "0", tag=每日投币数量, desc=选择每日需要自动投币的数量，选0则仅签到不投币。
+Silver2Coin = switch, true, tag=银瓜子换硬币, desc=是否开启每日银瓜子兑换硬币
+AutoCharge = switch, false, tag=自动充电, desc=是否开启年度大会员自动充电任务
+ChargeMid = input, "", tag=充电用户ID, desc=被充电用户的UID，不填则默认给自己充电
+ChargeBP = input, "5", tag=充电B币数, desc=每次充电消耗的B币数量(1-50)
 
 [Script]
 cron "40 7 * * *" script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliDailyBonus.js, timeout=15, tag=B站每日任务@MinCheng7
