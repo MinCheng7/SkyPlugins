@@ -1,7 +1,7 @@
 # GetCookies
 自用的适用于Loon的获取Cookie集合
 
-包含爱奇艺、百度贴吧、华住会、京东等
+包含百度贴吧、华住会、京东等
 
 京东获取cookie需要进入[浏览器版主页](https://home.m.jd.com/myJd/newhome.action)
 
