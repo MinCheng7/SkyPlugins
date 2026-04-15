@@ -4,10 +4,11 @@
 # GetCookies
 自用的适用于Loon的获取Cookie集合
 
-解决了华住会获取cookie时的usertoken空白问题
+解决了华住会获取cookie时usertoken空白而导致无法签到的问题
 
 # BiliDailyBonus
 Fork From：[MartinsKing](https://github.com/clydetime)
+
 修改内容：只保留扫码获取cookie；满级用户不再提示升级相关通知；直接在插件内修改每日投币数...
 
 
