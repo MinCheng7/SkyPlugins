@@ -3,7 +3,6 @@
 #!author=MinCheng7[https://github.com/MinCheng7], ClydeTime[https://github.com/ClydeTime]
 #!homepage=https://github.com/MinCheng7/SkyPlugins
 #!icon=https://raw.githubusercontent.com/MinCheng7/icons/refs/heads/other-icons/2233.jpg
-#!edit=https://github.com/MinCheng7/SkyPlugins/edit/main/GetCookies.plugin
 
 [Argument]
 CoinNum = select, "5", "4", "3", "2", "1", "0", tag=[设置] 每日投币数量, desc=选择每日需要自动投币的数量，选0则仅签到不投币。
