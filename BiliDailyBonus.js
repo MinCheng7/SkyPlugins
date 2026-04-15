@@ -85,7 +85,7 @@ const persistentStore = config => {
 	$.log(successMessage)
 }
 
-const $ = new Env("bilibili")
+const $ = new Env("哔哩哔哩每日任务")
 const startTime = format()
 let cards = []
 let config = $.getItem($.name + "_daily_bonus", {});
