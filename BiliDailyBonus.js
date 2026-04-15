@@ -155,18 +155,18 @@ async function signBiliBili() {
 				short_link = encodeURIComponent(card?.short_link_v2.replace(/\\\//g, '/'))
 				await watch(item.desc.rid, item.desc.bvid, card.cid)
 				
-				// 1. 观看后等待 5 秒
-				$.log("- ⏳ 等待 5 秒后分享...")
-				await $.wait(5000)
+				// 1. 观看后等待 2 秒
+				$.log("  ⏳ 等待 2 秒后分享...")
+				await $.wait(2000)
 				
 				await share(item.desc.rid, card.cid, short_link)
 			} else {
 				$.log("❌ 获取视频失败,请重试或寻求帮助")
 			}
 			
-			// 2. 分享后等待 5 秒进入投币
-			$.log("- ⏳ 等待 5 秒后进入投币...")
-			await $.wait(5000)
+			// 2. 分享后等待 3 秒进入投币
+			$.log("  ⏳ 等待 3 秒后进入投币...")
+			await $.wait(3000)
 
 			$.log("3️⃣ 投币任务")
 			config.coins?.failures > 0 && (config.coins.failures = 0)//重置投币失败次数
@@ -177,8 +177,8 @@ async function signBiliBili() {
 					await coin()
 					// 3. 如果需要投多个币，每次投币之间也间隔 5 秒 (最后一次投币后不等待)
 					if (i < real_times - 1) {
-						$.log("- ⏳ 等待 5 秒后继续投币...")
-						await $.wait(5000)
+						$.log("  ⏳ 等待 3 秒后继续投币...")
+						await $.wait(3000)
 					}
 				}
 			}
@@ -375,7 +375,7 @@ async function loginConfirm(auth_code) {
 async function watch(aid, bvid, cid) {
 	$.log("1️⃣ 观看(登录)任务")
 	if (check("watch")) {
-		$.log(`- 正在观看(登录)(${bvid})`)
+		$.log(`    正在观看(登录)(${bvid})`)
 		const body = {
 			aid,
 			cid,
@@ -1078,7 +1078,7 @@ async function Charge(mid, bp_num) {
 }
 
 async function me() {
-	$.log("\n---- 👤 用户信息 ----")
+	$.log("\n---- 👤 用户信息 ----\n")
 	const myRequest = {
 		url: 'https://api.bilibili.com/x/web-interface/nav',
 		headers: {
@@ -1093,7 +1093,7 @@ async function me() {
 				$.setItem($.name + "_daily_bonus", (config = config?.Settings && Object.keys(config.Settings).length ? { Settings: config.Settings } : null) && $.toStr(config))//清空cookie但保留boxjs设置
 				return false
 			} else {
-				$.log("🍪 Cookie有效 ✅ 丨 📝 任务正在进行")
+				$.log("🍪 Cookie有效 ✅ 丨 📝 任务正在进行\n")
 				config.user = body?.data
 				config.user.num = check("user") ? 1 : (config.user.num || 0) + 1
 				$.setItem($.name + "_daily_bonus", $.toStr(config))
@@ -1108,7 +1108,7 @@ async function me() {
 				if (config.user.vipStatus === 1) {
     				$.log("🫅 尊贵的" + config.user.vip_label.text + "「" + config.user.uname + "」")
 					$.log("🪪 ID: " + config.user.mid)
-    				$.log("👑大会员有效期至：" + format(config.user.vipDueDate, 'yyyy-MM-dd'))
+    				$.log("👑 大会员有效期至：" + format(config.user.vipDueDate, 'yyyy-MM-dd'))
 				}
 				$.log("🪙 硬币: " + Math.floor(config.user.money))
 				$.log("💴 B币: " + config.user.wallet.bcoin_balance)
@@ -1143,7 +1143,7 @@ async function me() {
 }
 
 async function queryStatus() {
-	$.log("\n---- 📝 任务情况 ----")
+	$.log("\n---- 📝 任务情况 ----\n")
 	const myRequest = {
 			url: "https://api.bilibili.com/x/member/web/exp/reward",
 			headers: {
