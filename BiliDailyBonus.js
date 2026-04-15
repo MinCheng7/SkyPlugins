@@ -1,6 +1,5 @@
 /*
 哔哩哔哩每日任务和奖励
-
 更新时间: 2026-04-15
 脚本兼容: QuantumultX, Surge, Loon
 脚本作者: @Mincheng7, 原作者: MartinsKing(@ClydeTime)
@@ -188,7 +187,12 @@ async function signBiliBili() {
 		}
 		
 		//await liveSign() //已下线
-		await silver2coin()
+		const s2cSwitch = $.getItem("Silver2Coin");
+		if (s2cSwitch === true || s2cSwitch === undefined) { 
+    		await silver2coin();
+		} else {
+    		$.log("跳过银瓜子换硬币任务（已关闭）");
+		}
 		let vipMessage = ''
 		if (config.user.vipStatus === 1) {
 			$.log("---- 开始大会员额外任务")
@@ -237,7 +241,19 @@ async function signBiliBili() {
 				if (config.user.vipType === 2) {
 					for (const {code, title} of privileges) await vipPrivilege(code) && (code === 1 ? $.msg(title, "🎉🎉🎉领取成功", `- 领取${title}成功`) : $.log(`- 领取${title}成功`))
 					await $.wait(800) //延迟执行,避免领劵失败
-					await Charge(config.Settings?.charge_mid || config.user.mid, config.Settings?.bp_num || 5)//充电
+					const chargeSwitch = $.getItem("AutoCharge");
+					if (chargeSwitch === true) {
+						const customMid = $.getItem("ChargeMid");
+						const customBP = $.getItem("ChargeBP");
+						
+						// 优先使用插件设置的值，没有则使用原有配置或默认值
+						const finalMid = (customMid && customMid !== "") ? customMid : (config.Settings?.charge_mid || config.user.mid);
+						const finalBP = (customBP && customBP !== "") ? Number(customBP) : (config.Settings?.bp_num || 5);
+						
+						await Charge(finalMid, finalBP);
+					} else {
+						$.log("跳过自动充电任务（已关闭）");
+					}//充电
 				} else {
 					for (const code of [6, 7]) await vipPrivilege(code) && $.log(`- 领取${privileges.find(p => p.code === code).title}成功`)
 				}
