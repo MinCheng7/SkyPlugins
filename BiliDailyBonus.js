@@ -9,42 +9,30 @@
 	抓取cookie时注意保证账号登录状态;
 	账号内须有一定数量的关注数，否则无法完成投币;
 	当硬币不足5枚，提示硬币不足，停止投币;
-	为保证投币任务成功, 脚本有重试机制(最多重试10次), 以确保任务完成, 前提需要您尽可能多的关注Up主;
+	为保证投币任务成功, 需要您尽可能多的关注Up主;
 	年度大会员每月B币券会在每月1号、15号尝试领取，确保应用正常运行, 以防漏领;
 	年度大会员自动充电会在每次领劵之后进行, 默认为自己充电, B币多的用户可自行到boxjs设置，以防误充.
 使用声明: ⚠️此脚本仅供学习与交流，请勿贩卖！⚠️
-脚本参考: Nobyda、Wyatt1026、ABreadTree、chavyleung、SocialSisterYi、catlair
+脚本参考: @Nobyda, @Wyatt1026, @ABreadTree, @chavyleung, @SocialSisterYi, @catlair  
 ************************
-QX, Surge, Loon说明：
+Loon说明：
 ************************
 1.获取cookie
 	Ⅰ. 后台退出手机B站客户端的情况下, 重新打开APP进入主页, 保持脚本常驻确保cookie不过期(已失效)
-	Ⅱ. 扫码方式获得长期cookie, 获取后关闭脚本, 注意：两种方法只能启用一种！！！
+	Ⅱ. 扫码方式获得长期cookie, 获取后关闭脚本.
 	如通知成功获取cookie, 则可以使用此签到脚本.
-	脚本默认在每天上午7点30执行.
+	脚本默认在每天上午7点40执行.
 2.投币设置
 	定时任务脚本投币规则为: 随机获取关注列表Up主视频, 默认5视频5硬币, 不点赞.
 	如果不想投币, 在插件里把每日投币数改为0即可 
-/***********************
-Surge 脚本配置:
-************************
-
-# B站每日等级任务 「请在模块中添加」
-https://raw.githubusercontent.com/ClydeTime/BiliBili/main/modules/BiliBiliDailyBonus.sgmodule
 
 ************************
-QuantumultX 远程脚本配置:
+Loon 配置:
 ************************
+# BiliDailyBonus 「在插件中添加」
+https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliDailyBonus.plugin
 
-# B站每日等级任务 「请在重写中添加」
-https://raw.githubusercontent.com/ClydeTime/BiliBili/main/modules/BiliBiliDailyBonus.snippet
 
-************************
-Loon 远程脚本配置:
-************************
-
-# B站每日等级任务 「请在插件中添加」
-https://raw.githubusercontent.com/ClydeTime/BiliBili/main/modules/BiliBiliDailyBonus.plugin
 */
 
 const format = (ts, fmt = 'yyyy-MM-dd HH:mm:ss') => {
@@ -93,8 +81,8 @@ const persistentStore = config => {
 	const isFirstInsert = config.FirstInsert
 	delete config.FirstInsert
 	const successMessage = $.setItem($.name + "_daily_bonus", $.toStr(config))
-		? "🎉cookie存储成功"
-		: "🤒cookie存储失败"
+		? "🍪cookie存储成功✅"
+		: "🍪cookie存储失败❌"
 	$.msg($.name, isFirstInsert ? "首次获取cookie" : "检测到cookie已更新", successMessage)
 	$.log($.name + ": " +`${isFirstInsert ? "首次获取cookie" : "检测到cookie已更新"}`)
 	$.log(successMessage)
@@ -130,11 +118,11 @@ const baseHeaders = {
 				config.key = url.match(/.*access_key=(.*?)&/)?.[1]
 				config.cookieStr = `DedeUserID=${config.cookie.DedeUserID}; DedeUserID__ckMd5=${config.cookie.DedeUserID__ckMd5}; SESSDATA=${config.cookie.SESSDATA}; bili_jct=${config.cookie.bili_jct}; sid=${config.cookie.sid}`
 			} else {
-				return $.msg($.name, "- 获取cookie信息异常")
+				return $.msg($.name, "❌获取cookie信息异常")
 			}
 			persistentStore(config)
 		} else {
-			$.msg($.name, "- 未发现有效cookie信息")
+			$.msg($.name, "❗未发现有效cookie信息")
 		}
 	} else {
 		await signBiliBili()
@@ -145,7 +133,7 @@ const baseHeaders = {
 
 async function getCookie() {
 	const qrCode = await getQrcode()
-	if (qrCode === "0") return $.msg($.name, "- 获取二维码失败！")
+	if (qrCode === "0") return $.msg($.name, "❌获取二维码失败！")
 	await $.wait(10000)
 	await waitConfirmLoop(0, await loginConfirm(qrCode), qrCode)
 }
@@ -169,21 +157,37 @@ async function signBiliBili() {
 				let card = $.toObj(item.card)
 				short_link = encodeURIComponent(card?.short_link_v2.replace(/\\\//g, '/'))
 				await watch(item.desc.rid, item.desc.bvid, card.cid)
+				
+				// 1. 观看后等待 5 秒
+				$.log("- ⏳ 等待 5 秒后分享...")
+				await $.wait(5000)
+				
 				await share(item.desc.rid, card.cid, short_link)
 			} else {
-				$.log("- 获取视频失败,请重试或寻求帮助")
+				$.log("❌获取视频失败,请重试或寻求帮助")
 			}
+			
+			// 2. 分享后等待 5 秒进入投币
+			$.log("- ⏳ 等待 5 秒后进入投币...")
+			await $.wait(5000)
 
 			$.log("3️⃣ 投币任务")
 			config.coins?.failures > 0 && (config.coins.failures = 0)//重置投币失败次数
 			if (real_times === 0){
-				$.log(`- 今日已完成 记录于${config.coins.time}`)
+				$.log(`✅今日已完成 记录于${config.coins.time}`)
 			} else {
-				for (let i = 0; i < real_times && (Math.floor(config.user.money) > 5 || ($.log("- 硬币不足,投币失败"), false)); i++) await coin()
+				for (let i = 0; i < real_times && (Math.floor(config.user.money) > 5 || ($.log("- 硬币不足,投币失败"), false)); i++) {
+					await coin()
+					// 3. 如果需要投多个币，每次投币之间也间隔 5 秒 (最后一次投币后不等待)
+					if (i < real_times - 1) {
+						$.log("- ⏳ 等待 5 秒后继续投币...")
+						await $.wait(5000)
+					}
+				}
 			}
-			$.log("---- 经验值任务已完成")
+			$.log("---- ⭕经验值任务已完成⭕ ----")
 		} else {
-			$.log("---- 经验值任务已完成")
+			$.log("---- ⭕经验值任务已完成⭕ ----")
 		}
 		
 		//await liveSign() //已下线
@@ -191,11 +195,11 @@ async function signBiliBili() {
 		if (s2cSwitch === true || s2cSwitch === undefined) { 
     		await silver2coin();
 		} else {
-    		$.log("跳过银瓜子换硬币任务（已关闭）");
+    		$.log("跳过银瓜子换硬币任务（未启用）");
 		}
 		let vipMessage = ''
 		if (config.user.vipStatus === 1) {
-			$.log("---- 开始大会员额外任务")
+			$.log("---- 🧾开始大会员额外任务🧾 ----")
 			const experience = await vipExtraExStatus()
 			let vipExtraExRet = false
 			experience === 0 ? $.log("- 大会员额外经验领取情况查询失败")
@@ -252,7 +256,7 @@ async function signBiliBili() {
 						
 						await Charge(finalMid, finalBP);
 					} else {
-						$.log("跳过自动充电任务（已关闭）");
+						$.log("跳过自动充电任务（未启用）");
 					}//充电
 				} else {
 					for (const code of [6, 7]) await vipPrivilege(code) && $.log(`- 领取${privileges.find(p => p.code === code).title}成功`)
@@ -262,10 +266,10 @@ async function signBiliBili() {
 		flag = !isNotComplete(exec_times)
 		let title = `${$.name} 登录${config.user.num}/观看${config.watch.num}/分享${config.share.num}/投币${config.coins.num / 10}${flag ? "已完成" : "未完成"}`
 		$.log(`#### ${title}`)
-		$.log(`- 登录时间: ${config.user.time || "暂无"}`)
-		$.log(`- 观看时间: ${config.watch.time || "暂无"}`)
-		$.log(`- 分享时间: ${config.share.time || "暂无"}`)
-		$.log(`- 投币时间: ${config.coins.time || "暂无"}`)
+		$.log(`📺 登录时间: ${config.user.time || "暂无"}`)
+		$.log(`🎦 观看时间: ${config.watch.time || "暂无"}`)
+		$.log(`💬 分享时间: ${config.share.time || "暂无"}`)
+		$.log(`💸 投币时间: ${config.coins.time || "暂无"}`)
 
 		let expInfo = config.user.level_info.current_level < 6 
     		? `经验:当前${config.user.level_info.current_exp}/下级${config.user.level_info.next_exp}/满级28800\n等级:当前${config.user.level_info.current_level}级 升满级最快需${Math.max(0, Math.ceil(config.user.v6_exp / 65))}天`
@@ -286,7 +290,7 @@ async function signBiliBili() {
 
 //目前只循环三次，也可设置多次
 async function waitConfirmLoop(times, login_confirm, qrCode) {
-	if (times >= 3) return $.msg("- 扫码确认失败！")
+	if (times >= 3) return $.msg("❌扫码确认失败！")
 	if (login_confirm) return
 	await $.wait(5000)
 	await waitConfirmLoop(++times, await loginConfirm(qrCode), qrCode)
@@ -316,7 +320,7 @@ async function getQrcode() {
 				$.log("二维码已生成，如在通知中获取图片失败，请20s内使用浏览器打开以下地址\n" + `${media_url}`)
 				return body.data.auth_code
 			} else {
-				$.log("- 生成Qrcode失败")
+				$.log("❌生成Qrcode失败")
 				return "0"
 			}
 		} catch (e) {
@@ -344,23 +348,23 @@ async function loginConfirm(auth_code) {
 		try {
 			const body = $.toObj(response.body)
 			if (body.code === 0 && body.message === "0") {
-				$.log("- 确认登录成功")
+				$.log("✅确认登录成功")
 				const cookieStr = body.data.cookie_info.cookies.map(c => `${c.name}=${c.value}`).join('; ');
 				[config.cookieStr, config.cookie, config.key] = [cookieStr, string2object(cookieStr), body.data.access_token];
 				persistentStore(config)
 			}
 			switch (body.code) {
 				case 0:
-					$.msg("- 扫码确认成功！")
+					$.msg("✅扫码确认成功！")
 					return true
 				case 86038:
-					$.msg("- 二维码已失效")
+					$.msg("❌二维码已失效")
 					return false
 				case 86039:
-					$.msg("- 二维码尚未确认")
+					$.msg("❗二维码尚未确认")
 					return false
 				case 86090:
-					$.msg("- 二维码已扫码未确认")
+					$.msg("❗已扫码未确认")
 					return false
 				default:
 					return false
@@ -405,23 +409,23 @@ async function watch(aid, bvid, cid) {
 		await $.fetch(myRequest).then(response => {
 			const body = $.toObj(response.body)
 			if (body?.code === 0) {
-				$.log(`- 累计观看(登录)次数 ${(config.watch.num || 0) + 1}`)
+				$.log(`🎦累计观看(登录)次数 ${(config.watch.num || 0) + 1}`)
 				config.user.num = (config.user.num || 0) + 1
 				config.watch.num = (config.watch.num || 0) + 1
 				$.setItem($.name + "_daily_bonus", $.toStr(config))
 			} else {
-				$.log("- 观看失败, 原因: " + body?.message)
+				$.log("❌观看失败，" + body?.message)
 			}
 		})
 	} else {
-		$.log(`- 今日已观看 记录于${config.watch.time}`)
+		$.log(`✅今日已观看 记录于${config.watch.time}`)
 	}
 }
 
 async function share(aid, cid, short_link) {
 	$.log("2️⃣ 分享任务")
 	if (check("share")) {
-		$.log("- 正在分享")
+		$.log("💬正在分享")
 		const body = {
 			access_key: config.key,
 			actionKey: 'appkey',
@@ -456,20 +460,20 @@ async function share(aid, cid, short_link) {
 			const body = $.toObj(response.body)
 			if (body?.code === 0) {
 				config.share.num = (config.share.num || 0) + 1
-				$.log("- 分享成功")
+				$.log("✅分享成功")
 				$.setItem($.name + "_daily_bonus", $.toStr(config))
 			} else {
-				$.log("- 分享失败, 原因: " + body?.message)
+				$.log("❌分享失败，" + body?.message)
 			}
 		})
 	} else {
-		$.log(`- 今日已分享 记录于${config.share.time}`)
+		$.log(`✅今日已分享 记录于${config.share.time}`)
 	}
 }
 
 async function coin() {
 	if (config.coins.num >= 50) {
-		$.log(`- 今日已完成 记录于${config.coins.time}`)
+		$.log(`✅今日已完成 记录于${config.coins.time}`)
 		return
 	}
 	let like_uid_list = await getFavUid()
@@ -497,17 +501,17 @@ async function coin() {
 				try {
 					const body = $.toObj(response.body)
 					if (body?.code === 0 && (body?.message === "0" || body?.message === "OK")) {
-						$.log("- 投币成功")
+						$.log("✅投币成功")
 						config.user.money -= 1
 						config.coins.num += 10
 						config.coins.time = startTime
 						$.setItem($.name + "_daily_bonus", $.toStr(config))
 					} else {
-						$.log("- 投币失败,原因 " + body.message)
+						$.log("❌投币失败，" + body.message)
 						config.coins.failures = (config.coins.failures === 0 || typeof config.coins.failures === 'undefined' ? 1 : config.coins.failures + 1)
 						$.setItem($.name + "_daily_bonus", $.toStr(config))
 						if (config.coins.failures < 11) {
-							$.log("- 正在重试...重试次数 " + (config.coins.failures - 1) + "(超过十次不再重试)")
+							$.log("❗正在重试...重试次数 " + (config.coins.failures - 1) + "(超过十次不再重试)")
 							await $.wait(300) //减少频繁请求报错概率
 							await coin()
 						}
@@ -517,10 +521,10 @@ async function coin() {
 				}
 			})
 		} else {
-			$.log("- 获取随机投币视频失败")
+			$.log("❌获取随机投币视频失败")
 		}
 	} else {
-		$.log("- 获取随机关注用户列表失败")
+		$.log("❌获取随机关注用户列表失败")
 	}
 }
 
@@ -536,7 +540,7 @@ async function getFavUid() {
 			const body = $.toObj(response.body)
 			let like_uid_list = new Array()
 			if (body?.code === 0) {
-				$.log("- 获取关注列表成功")
+				$.log("💌获取关注列表成功")
 				let like_list = body?.data?.list
 				//let $.name_list = new Array()
 				for (let i = 0; i < like_list.length; i ++) {
@@ -546,8 +550,7 @@ async function getFavUid() {
 				return like_uid_list
 				//$.log($.toStr($.name_list))
 			} else {
-				$.log("- 获取关注列表成失败")
-				$.log("- 原因 " + body?.message)
+				$.log("❌获取关注列表失败，" + body?.message)
 				return like_uid_list
 			}
 		} catch (e) {
@@ -557,7 +560,7 @@ async function getFavUid() {
 }
 
 async function getFavAid(arr) {
-	//$.log("- 获取关注列表中的随机视频")
+	//$.log("🎞️ 获取关注列表中的随机视频")
 	let random_int = Math.floor((Math.random()*arr.length))
 	let random_mid = arr[random_int]
 	let wbiSigns = getWbiSigns({mid: random_mid})
@@ -572,29 +575,27 @@ async function getFavAid(arr) {
 		try {
 			const body = $.toObj(response.body)
 			if (body?.code === 0 && body.data?.list?.vlist.some(Boolean)) {
-				$.log("- 获取投币视频成功")
+				$.log("✅获取投币视频成功")
 				let vlist = body.data?.list?.vlist
 				let random_v_int = Math.floor((Math.random() * vlist.length))
 				let aid = vlist[random_v_int]?.aid
-				$.log("- 作者: " + vlist[random_v_int]['author'] + "; 视频标题: " + vlist[random_v_int]['title'])
+				$.log("🧑‍💻作者: " + vlist[random_v_int]['author'] + "; 视频标题: " + vlist[random_v_int]['title'])
 				return aid
 			} else {
-				$.log("- 获取投币视频失败")
-				$.log("- 原因 " + body?.message)
+				$.log("❌获取投币视频失败，" + body?.message)
 				return 0
 			}
 		} catch (e) {
 			$.logErr(e, response)
 		}
 	}, reason => {
-		$.log("- 获取投币视频失败")
-		$.log("- 原因 " + $.toStr(reason))
+		$.log("❌获取投币视频失败，" + $.toStr(reason))
 		return 0
 	})
 }
 
 async function silver2coin() {
-	$.log("#### 银瓜子兑换硬币任务")
+	$.log("---- 🪙银瓜子兑换硬币任务 ----")
 	const body = {
 		csrf: config.cookie.bili_jct,
 		csrf_token: config.cookie.bili_jct
@@ -611,20 +612,18 @@ async function silver2coin() {
 			const body = $.toObj(response.body)
 			// 兑换成功
 			if (body && body.code === 0) {
-				$.log(`- 成功兑换: ${body.data.coin}个硬币`)
+				$.log(`✅成功兑换: ${body.data.coin}个硬币`)
 				$.log(`当前银瓜子: ${body.data.silver} , 当前金瓜子: ${body.data.gold}`)
 			}
 			// 兑换中止（重复兑换&银瓜子不足）
 			else if (body && body.code === 403) {
-				$.log("- 未成功兑换")
-				$.log(`- 原因: ${body.message}`)
+				$.log("❌未成功兑换，" + body?.message)
 			}
 			// 兑换失败
 			else {
-				let subTitle = "- 兑换失败"
-				let detail = `- 原因: ${body.message}`
-				$.log(subTitle)
-				$.log(detail)
+				let subTitle = "❌兑换失败"
+				let detail = ` ${body.message}`
+				$.log(subTitle + ", " + detail)
 			}
 		} catch (e) {
 			$.logErr(e, response)
@@ -633,7 +632,7 @@ async function silver2coin() {
 }
 
 async function liveSign() {
-	$.log("#### 直播签到任务")
+	$.log("---- ✍️直播签到任务 ----")
 	const myRequest = {
 		url: "https://api.live.bilibili.com/xlive/web-ucenter/v1/sign/DoSign",
 		headers: {
@@ -644,13 +643,12 @@ async function liveSign() {
 		try {
 			const body = $.toObj(response.body)
 			if (body?.code === 0) {
-				$.log("- 签到成功")
+				$.log("✅签到成功")
 				$.log(`签到奖励:${body.data.text},连续签到${body.data.hadSignDays}天`)
 			} else if (body && body.code === 1011040){
-				$.log("- 今日已完成")
+				$.log("✅今日已完成")
 			} else {
-				$.log("- 签到失败")
-				$.log("- 原因 " + body?.message)
+				$.log("❌签到失败，" + body?.message)
 			}
 		} catch (e) {
 			$.logErr(e, response)
@@ -673,11 +671,10 @@ async function bigScoreSign() {
 			try {
 				const body = $.toObj(response.body)
 				if (body?.code === 0 && body?.message === "success") {
-					$.log("- 签到成功")
+					$.log("✅签到成功")
 					return true
 				} else {
-					$.log("- 签到失败")
-					$.log("- 原因 " + body?.message)
+					$.log("❌签到失败，" + body?.message)
 					return false
 				}
 			} catch (e) {
@@ -685,7 +682,7 @@ async function bigScoreSign() {
 			}
 		})
 	} else {
-		$.log("- 今日已完成")
+		$.log("✅今日已完成")
 	}
 }
 
@@ -711,7 +708,7 @@ async function vipExtraExStatus() {
 }
 
 async function vipExtraEx() {
-	$.log("#### 大会员每日额外经验值")
+	$.log("---- 🫅大会员每日额外经验值 ----")
 	const body = {
 		csrf: config.cookie.bili_jct,
 		ts: $.getTimestamp(),
@@ -734,11 +731,10 @@ async function vipExtraEx() {
 		try {
 			const body = $.toObj(response.body)
 			if (body?.code === 0 && body?.message === "0") {
-				$.log("- 成功获得10经验值")
+				$.log("✅ 成功获得10经验值")
 				return true
 			} else {
-				$.log("- 每日额外经验任务失败")
-				$.log("- 原因 " + body?.message)
+				$.log("❌每日额外经验任务失败，" + body?.message)
 				return false
 			}
 		} catch (e) {
@@ -802,11 +798,10 @@ async function bigScoreVipMallView() {
 		try {
 			const body = $.toObj(response.body)
 			if (body?.code === 0 && body?.message === "SUCCESS") {
-				$.log("- 成功获得10点大积分")
+				$.log("✅ 成功获得10点大积分")
 				return true
 			} else {
-				$.log("- 浏览会员购任务失败")
-				$.log("- 原因 " + body?.message)
+				$.log("❌浏览会员购任务失败，" + body?.message)
 				return false
 			}
 		} catch (e) {
@@ -825,11 +820,10 @@ async function bigScoreAnimateTab() {
 		try {
 			const body = $.toObj(response.body)
 			if (body?.code === 0 && body?.message === "success") {
-				$.log("- 成功获得10点大积分")
+				$.log("✅ 成功获得10点大积分")
 				return true
 			} else {
-				$.log("- 浏览追番频道任务失败")
-				$.log("- 原因 " + body?.message)
+				$.log("❌浏览追番频道任务失败，" + body?.message)
 				return false
 			}
 		} catch (e) {
@@ -848,11 +842,10 @@ async function bigScoreFilmTab() {
 		try {
 			const body = $.toObj(response.body)
 			if (body?.code === 0 && body?.message === "success") {
-				$.log("- 成功获得10点大积分")
+				$.log("✅ 成功获得10点大积分")
 				return true
 			} else {
-				$.log("- 浏览影视频道任务失败")
-				$.log("- 原因 " + body?.message)
+				$.log("❌浏览影视频道任务失败，" + body?.message)
 				return false
 			}
 		} catch (e) {
@@ -879,10 +872,10 @@ async function bigScoreDressView() {
 		try {
 			const body = $.toObj(response.body)
 			if (body?.code === 0 && body?.message === "success") {
-				$.log("- 成功获得10点大积分")
+				$.log("✅成功获得10点大积分")
 				return true
 			} else {
-				$.log("- 浏览装扮商城主页任务失败")
+				$.log("❌浏览装扮商城主页任务失败")
 				return false
 			}
 		} catch (e) {
@@ -928,12 +921,11 @@ async function bigScoreOgvWatchNew() {
 					const { task_id, token } = await bigScoreOgvWatchMaterial(bangumi.season_id, episode.ep_id) || {}
 					Object.assign(config, { task_id, token })
 				} else {
-					$.log("- 获取剧集明细失败")
+					$.log("❌获取剧集明细失败")
 				}
 				$.setItem($.name + "_daily_bonus", $.toStr(config))
 			} else {
-				$.log("- 大会员观看剧集任务接取失败")
-				$.log("- 原因 " + body?.message)
+				$.log("❌大会员观看剧集任务接取失败，" + body?.message)
 			}
 			return false
 		} catch (e) {
@@ -956,11 +948,10 @@ async function bigScoreOgvWatchMaterial(season_id, epid) {
 		try {
 			const body = $.toObj(response.body)
 			if (body?.code === 0 && body?.message === "success") {
-				$.log("- 任务计时开始,等待十分钟...")
+				$.log("⏳ 任务计时开始,等待十分钟...")
 				return body.data.watch_count_down_cfg
 			} else {
-				$.log("- 任务计时失败")
-				$.log("- 原因 " + body?.message)
+				$.log("❌ 任务计时失败，" + body?.message)
 				return 0
 			}
 		} catch (e) {
@@ -981,10 +972,9 @@ async function bigScoreOgvWatchComplete(task_id, token) {
 		try {
 			const body = $.toObj(response.body)
 			if (body?.code === 0 && body?.message === "success") {
-				$.log("- 大会员观看剧集任务完成")
+				$.log("✅大会员观看剧集任务完成")
 			} else {
-				$.log("- 大会员观看剧集任务失败")
-				$.log("- 原因 " + body?.message)
+				$.log("❌大会员观看剧集任务失败，" + body?.message)
 			}
 		} catch (e) {
 			$.logErr(e, response)
@@ -1028,13 +1018,20 @@ async function vipPrivilege(type) {
 			if (body?.code === 0) {
 				return true
 			} else {
-				$.log("- 领取大会员每月福利失败")
-				$.log("- 原因 " + body?.message)
-				if (type === 1) {
-					$.msg("年度大会员月度福利", "B币券领取失败", "原因: " + body?.message)
+				// 核心修改：如果是“已领取”状态，合并通知
+				if (body?.message === "你已领取过该权益" || body?.message.includes("已领取")) {
+					// 仅在查第一个权益（年度大会员的B币券 type=1，或普通大会员的装扮 type=6）时打印一次提示
+					if (type === 1 || type === 6) {
+						$.log("🎁 当月各项大会员福利已领取，不再重复通知")
+					}
+				} else {
+					// 真正发生其他未知错误时，才打印详细报错
+					$.log(`- 领取福利(类型:${type})失败，` + body?.message)
+					if (type === 1) {
+						$.msg("年度大会员月度福利", "B币券领取失败", "，" + body?.message)
+					}
 				}
 				return false
-				//其他福利没什么用,失败也无需单独通知
 			}
 		} catch (e) {
 			$.logErr(e, response)
@@ -1043,7 +1040,7 @@ async function vipPrivilege(type) {
 }
 
 async function Charge(mid, bp_num) {
-	$.log("#### B币券自动充电")
+	$.log("---- ⚡B币券自动充电 ----")
 	const body = {
 		bp_num,
 		is_bp_remains_prior: true,
@@ -1065,19 +1062,17 @@ async function Charge(mid, bp_num) {
 			if (body?.code === 0) {
 				if (body?.data?.status === 4) {
 					if (mid === config.user.mid) {
-						$.log("- 为自己充电成功")
+						$.log("✅为自己充电成功")
 					} else {
-						$.log(`- 为用户id为${mid}的用户充电成功`)
+						$.log(`✅为用户id为${mid}的用户充电成功`)
 					}
 				} else if (body?.data?.status === -4) {
-					$.log("- 充电失败, B币不足")
+					$.log("❌充电失败, B币不足")
 				} else {
-					$.log("- 充电失败")
-					$.log("- 原因 " + body?.message)
+					$.log("❌充电失败，" + body?.message)
 				}
 			} else {
-				$.log("- 充电失败")
-				$.log("- 原因 " + body?.message)
+				$.log("❌充电失败，" + body?.message)
 			}
 		} catch (e) {
 			$.logErr(e, response)
@@ -1086,7 +1081,7 @@ async function Charge(mid, bp_num) {
 }
 
 async function me() {
-	$.log("#### 用户信息")
+	$.log("---- 👤用户信息 ----")
 	const myRequest = {
 		url: 'https://api.bilibili.com/x/web-interface/nav',
 		headers: {
@@ -1097,11 +1092,11 @@ async function me() {
 		try {
 			const body = $.toObj(response.body)
 			if (body?.code) {
-				$.log("- ❌❌获取用户信息失败(请更新cookie)")
+				$.log("❌获取用户信息失败(请更新cookie)")
 				$.setItem($.name + "_daily_bonus", (config = config?.Settings && Object.keys(config.Settings).length ? { Settings: config.Settings } : null) && $.toStr(config))//清空cookie但保留boxjs设置
 				return false
 			} else {
-				$.log("- 🎉cookie有效任务即将开始🎉")
+				$.log("🍪Cookie有效✅丨📝任务正在进行")
 				config.user = body?.data
 				config.user.num = check("user") ? 1 : (config.user.num || 0) + 1
 				$.setItem($.name + "_daily_bonus", $.toStr(config))
@@ -1114,14 +1109,13 @@ async function me() {
 			
 
 				if (config.user.vipStatus === 1) {
-    				$.log("- 💖尊贵的" + config.user.vip_label.text + "用户💖")
-    				$.log("- 您的大会员过期时间为：" + format(config.user.vipDueDate, 'yyyy-MM-dd') + "日")
+    				$.log("👑尊贵的" + config.user.vip_label.text + "「" + config.user.uname + "」")
+					$.log("🪪ID: " + config.user.mid)
+    				$.log("您的大会员有效期至：" + format(config.user.vipDueDate, 'yyyy-MM-dd'))
 				}
-				$.log("- 名称: " + config.user.uname)
-				$.log("- ID: " + config.user.mid)
-				$.log("- 硬币: " + Math.floor(config.user.money))
-				$.log("- B币: " + config.user.wallet.bcoin_balance)
-				$.log("- 等级: " + config.user.level_info.current_level)
+				$.log("🪙硬币: " + Math.floor(config.user.money))
+				$.log("💴B币: " + config.user.wallet.bcoin_balance)
+				$.log("📈等级: Level " + config.user.level_info.current_level)
 
 				// 判断是否满级，满级则精简日志
 				if (config.user.level_info.current_level < 6) {
@@ -1130,10 +1124,10 @@ async function me() {
 				$.log(`- 距离下级还需: ${config.user.next_day}天(登录 观看 分享)`)
 				$.log(`- 距离满级还需: ${Math.max(0, config.user.v6_day)}天(登录 观看 分享)`)
 				} else {
-					$.log(`- 当前经验: ${config.user.level_info.current_exp} (已满级🎉)`)
+					$.log(`- 当前经验: ${config.user.level_info.current_exp} (已满级)`)
 				}
 
-				$.log(`- 剩余硬币最多可投: ${Math.floor((config.user.money)/5)}天`)
+				$.log(`💰剩余硬币最多可投: ${Math.floor((config.user.money)/5)}天`)
 
 				if (config.user.level_info.current_level < 6) {
 					$.log("- 距离满级最快还需: " + Math.max(0, Math.ceil(config.user.v6_exp / 65)) + "天(日常 + 投币*5)")
@@ -1145,14 +1139,14 @@ async function me() {
 			$.logErr(e, response)
 		}
 	}, reason => {
-		$.msg($.name, "- 获取用户信息失败", $.toStr(reason))
+		$.msg($.name, "❌获取用户信息失败", $.toStr(reason))
 		return false
 })
 
 }
 
 async function queryStatus() {
-	$.log("#### 检查任务进行状况")
+	$.log("---- 📝任务进行状况 ----")
 	const myRequest = {
 			url: "https://api.bilibili.com/x/member/web/exp/reward",
 			headers: {
@@ -1164,45 +1158,44 @@ async function queryStatus() {
 			const body = $.toObj(response.body)
 			if (body?.code === 0) {
 				if (body.data.login) {
-					$.log("- 今日已登录")
+					$.log("✅今日已登录")
 					config.user.num = config.user?.num || 1
 					if (!config['user'].hasOwnProperty("time")) config.user.time = startTime
 				} else {
-					$.log("! 今日尚未登录")
+					$.log("❕今日尚未登录")
 					config.user.num = 0
 				}
 				if (body.data.watch){
-					$.log("- 今日已观看")
+					$.log("✅今日已观看")
 					config.watch.num = config.watch?.num || 1
 					if (!config['watch'].hasOwnProperty("time")) config.watch.time = startTime
 				} else {
-					$.log("! 今日尚未观看")
+					$.log("❕今日尚未观看")
 					config.watch.num = 0
 				}
 				if (body.data.share){
-					$.log("- 今日已分享")
+					$.log("✅今日已分享")
 					config.share.num = config.share?.num || 1
 					if (!config['share'].hasOwnProperty("time")) config.share.time = startTime
 				} else {
-					$.log("! 今日尚未分享")
+					$.log("❕今日尚未分享")
 					config.share.num = 0
 				}
 				if (body.data.coins === 50){
-					$.log("- 今日已投币")
+					$.log("✅今日已投币")
 					if (!config['coins'].hasOwnProperty("time")) config.coins.time = startTime
 				} else if ((body.data.coins / 10) >= Number(config.Settings?.exec ?? 5)) {
 					if (!config['coins'].hasOwnProperty("time")) config.coins.time = startTime
-					$.log("- 今日已投币（达到用户设定数量）")
+					$.log("✅ 今日已投币（达到用户设定数量）")
 				} else if (config.user.money <= 5) {
-					$.log("! 硬币数不足")
+					$.log("❕硬币数不足")
 				} else {
-					$.log("! 今日投币未完成")
+					$.log("❕今日投币未完成")
 				}
 				config.coins.num = body.data.coins
 				$.setItem($.name + "_daily_bonus", $.toStr(config))
 			} else {
-				$.log("- 查询失败")
-				$.log("- 原因 " + body?.message)
+				$.log("❌查询失败，" + body?.message)
 			}
 		} catch (e) {
 			$.logErr(e, response)
