@@ -24,8 +24,8 @@ http-request ^https?:\/\/tiebac\.baidu\.com\/c\/u\/follow\/getFoldedMessageUserI
 http-request ^https?:\/\/tiebac\.baidu\.com\/c\/s\/getClientConfig script-path=https://gist.githubusercontent.com/blackmatrix7/cebabe7a385fc6a9ad32e2f7a35851dc/raw/1363d8720c92267d0a97fcd8eb98673760891fc9/tieba_min.js,tag=百度贴吧4@blackmatrix7
 
 # 哔哩哔哩
-http-response ^https?:\/\/app\.bilibili\.com\/x\/resource\/fingerprint\? script-path=BiliDailyBonus.js, requires-body=true, timeout=20, tag=哔哩哔哩QR@ClydeTime, enable={扫码Cookie}
-http-request ^https?:\/\/app\.bilibili\.com\/x\/resource\/fingerprint\? script-path=https://raw.githubusercontent.com/ClydeTime/BiliBili/main/js/BiliBiliDailyBonus.js, timeout=20, tag=哔哩哔哩App@ClydeTime, enable={APPCookie}
+http-response ^https?:\/\/app\.bilibili\.com\/x\/resource\/fingerprint\? script-path=https://raw.githubusercontent.com/ClydeTime/BiliBili/main/js/BiliBiliDailyBonus.js, requires-body=true, timeout=30, tag=哔哩哔哩QR@ClydeTime, enable={扫码Cookie}
+http-request ^https?:\/\/app\.bilibili\.com\/x\/resource\/fingerprint\? script-path=https://raw.githubusercontent.com/ClydeTime/BiliBili/main/js/BiliBiliDailyBonus.js, timeout=30, tag=哔哩哔哩App@ClydeTime, enable={APPCookie}
 
 # 华住会
 http-request https:\/\/appgw\.huazhu\.com\/game\/sign_header tag=华住会@Mincheng7, script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js, requires-body=false, img-url=https://raw.githubusercontent.com/evilbutcher/Quantumult_X/master/picture/hzh.png
