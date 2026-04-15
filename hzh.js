@@ -21,22 +21,22 @@ https://raw.githubusercontent.com/evilbutcher/QuantumultX/main/check_in/hzh/hzh.
 【Surge】
 -----------------
 [Script]
-华住会获取签到Cookie = type=http-request, pattern = https:\/\/appgw\.huazhu\.com\/game\/sign_header, script-path=https://github.com/Moli-X/Resources/raw/main/Script/Hzh.js, requires-body=false
-华住会 = type=cron,cronexp=5 0 * * *,script-path=https://github.com/Moli-X/Resources/raw/main/Script/Hzh.js
+华住会获取签到Cookie = type=http-request, pattern = https:\/\/appgw\.huazhu\.com\/game\/sign_header, script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js, requires-body=false
+华住会 = type=cron,cronexp=5 0 * * *,script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js
 
 【Loon】
 -----------------
 [Script]
-http-request https:\/\/appgw\.huazhu\.com\/game\/sign_header tag=华住会获取签到Cookie, script-path=https://github.com/Moli-X/Resources/raw/main/Script/Hzh.js, requires-body=false
-cron "5 0 * * *" script-path=https://github.com/Moli-X/Resources/raw/main/Script/Hzh.js, tag=华住会
+http-request https:\/\/appgw\.huazhu\.com\/game\/sign_header tag=华住会获取签到Cookie, script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js, requires-body=false
+cron "5 0 * * *" script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js, tag=华住会
 
 【Quantumult X】
 -----------------
 [rewrite_local]
-https:\/\/appgw\.huazhu\.com\/game\/sign_header url script-request-header https://github.com/Moli-X/Resources/raw/main/Script/Hzh.js
+https:\/\/appgw\.huazhu\.com\/game\/sign_header url script-request-header https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js
 
 [task_local]
-5 0 * * * https://github.com/Moli-X/Resources/raw/main/Script/Hzh.js, tag=华住会
+5 0 * * * https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js, tag=华住会
 
 【All App MitM】
 hostname = appgw.huazhu.com
