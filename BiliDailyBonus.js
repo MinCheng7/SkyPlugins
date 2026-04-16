@@ -265,7 +265,7 @@ async function signBiliBili() {
 
 		notice = {
 			title: `BiliBili「 ${config.user.uname}」`,
-			subTitle: `${flag ? "📃 今日任务已完成 ~ 🎉" : "❗️ 有未完成的任务"}`,
+			subTitle: `${flag ? "⭕ 今日任务已完成 ~" : "❗️ 有未完成的任务"}`,
 			content:
 				expInfo + "\n" + (silverLogMsg || "") + `硬币数量: ${Math.floor(config.user.money)} 🪙\n` + (typeof chargeLogMsg !== 'undefined' ? chargeLogMsg : "")
 		}
