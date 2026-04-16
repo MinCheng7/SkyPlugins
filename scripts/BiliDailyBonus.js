@@ -17,7 +17,7 @@
 ************************
 Loon 插件:
 # BiliDailyBonus 「在插件中添加」
-https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliDailyBonus.plugin
+https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/plugins/BiliDailyBonus.plugin
 ************************
 */
 
