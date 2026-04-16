@@ -22,13 +22,13 @@ http-request ^https?:\/\/tiebac\.baidu\.com\/c\/u\/follow\/getFoldedMessageUserI
 http-request ^https?:\/\/tiebac\.baidu\.com\/c\/s\/getClientConfig script-path=https://gist.githubusercontent.com/blackmatrix7/cebabe7a385fc6a9ad32e2f7a35851dc/raw/1363d8720c92267d0a97fcd8eb98673760891fc9/tieba_min.js,tag=百度贴吧4@blackmatrix7, enable={bdtb}
 
 # 哔哩哔哩
-http-response ^https?:\/\/app\.bilibili\.com\/x\/resource\/fingerprint\? script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/BiliDailyBonus.js, requires-body=true, timeout=30, tag=哔哩哔哩QR@Mincheng7, enable={bili}
+http-response ^https?:\/\/app\.bilibili\.com\/x\/resource\/fingerprint\? script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/scripts/BiliDailyBonus.js, requires-body=true, timeout=30, tag=哔哩哔哩QR@Mincheng7, enable={bili}
 
 # 华住会
-http-request https:\/\/appgw\.huazhu\.com\/game\/sign_header tag=华住会@Mincheng7, script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js, requires-body=false, timeout=30, enable={hzh}
+http-request https:\/\/appgw\.huazhu\.com\/game\/sign_header tag=华住会@Mincheng7, script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/scripts/hzh.js, requires-body=false, timeout=30, enable={hzh}
 
 # 什么值得买
-http-request ^https:\/\/user-api\.smzdm\.com\/users\/info script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/smzdm-cookie.js, timeout=60, tag=什么值得买@MinCheng7, enable={smzdm}
+http-request ^https:\/\/user-api\.smzdm\.com\/users\/info script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/scripts/smzdm-cookie.js, timeout=60, tag=什么值得买@MinCheng7, enable={smzdm}
 
 # 携程旅行
 http-response ^https:\/\/m\.ctrip\.com\/restapi\/soa2\/\d+\/[a-zA-Z]+Login(?:$|\?) script-path=https://raw.githubusercontent.com/NobyDa/Script/master/Ctrip-DailyBonus/Ctrip.js, requires-body=true, tag=携程旅行@NobyDa, enable={ctrip}
