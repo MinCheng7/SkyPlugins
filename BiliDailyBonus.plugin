@@ -8,7 +8,7 @@
 [Argument]
 bili = switch,false,tag=二维码Cookie,desc=是否启用此处修改
 RunTime = input, "40 7 * * *", tag=脚本执行时间, desc=请填写标准的 Cron 表达式。例如 "40 7 * * *" 表示每天早上 7:40 执行。
-CoinNum = select, "0", "1", "2", "3", "4", "5", tag=每日投币数量, desc=选择每日需要自动投币的数量，选0则仅签到不投币。
+CoinNum = select, "5", "4", "3", "2", "1", "0", tag=每日投币数量, desc=选择每日需要自动投币的数量，选0则仅签到不投币。
 Silver2Coin = switch, true, tag=银瓜子换硬币, desc=是否开启每日银瓜子兑换硬币
 AutoCharge = switch, false, tag=自动充电, desc=是否开启年度大会员自动充电任务
 ChargeMid = input, "", tag=充电用户ID, desc=被充电用户的UID，不填则默认给自己充电
