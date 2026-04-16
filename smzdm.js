@@ -1,7 +1,7 @@
 /*
 Author: @MinCheng7
 Original author: @chavyleung
-修改内容：做了自用的适配丨取消App端签到，只保留PC端|调整通知方式
+修改内容：做了自用的适配丨只保留PC端签到|调整通知方式
 更新日期：2026-04-16
 */
 // prettier-ignore
@@ -118,7 +118,7 @@ function showmsg() {
     $.desc = []
     $.subt = $.web.error_code === 0 ? 'PC端 签到成功✅' : $.web.error_code === 99 ? 'PC: 未登录❗' : 'PC: 签到失败❌'
     if ($.web.error_code === 0 && $.web.data) {
-      $.desc.push(`累计签到: ${$.web.data.checkin_num}天, 获得经验: ${$.web.data.exp}, 金币: ${$.web.data.gold}, 积分: ${$.web.data.point}`)
+      $.desc.push(`累计签到: ${$.web.data.checkin_num}天, 经验: ${$.web.data.exp}, 金币: ${$.web.data.gold}, 积分: ${$.web.data.point}`)
     } else if ($.web.error_msg) {
       $.desc.push(`PC端提示: ${$.web.error_msg}`)
     }
