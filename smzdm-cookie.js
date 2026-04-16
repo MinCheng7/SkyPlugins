@@ -2,7 +2,7 @@
  * function: 获取【什么值得买】Cookie
  * Author: @MinCheng7
  * Original author: @fmz200
- * date: 2026-04-16
+ * update: 2026-04-16
  * 使用方法：进入什么值得买app，我的-头像，即可获取cookie
  * 搭配签到脚本使用，脚本地址：https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/smzdm.js
  */
