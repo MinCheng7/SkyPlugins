@@ -1,7 +1,8 @@
 /*
 Author: @MinCheng7
 Original author: @chavyleung
-修改内容：做了自用的适配丨取消掉App端签到，只保留PC端|通知样式
+修改内容：做了自用的适配丨取消App端签到，只保留PC端|调整通知方式
+更新日期：2026-04-16
 */
 // prettier-ignore
 !function (t, r) { "object" == typeof exports ? module.exports = exports = r() : "function" == typeof define && define.amd ? define([], r) : t.CryptoJS = r() }(this, function () {
