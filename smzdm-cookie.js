@@ -3,6 +3,7 @@
  * Author: @MinCheng7
  * Original author: @fmz200
  * date: 2026-04-16
+ * 搭配签到脚本使用，脚本地址：https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/smzdm-cookie.js
  */
 
 const req_url = $request.url;
