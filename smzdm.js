@@ -126,7 +126,7 @@ function showmsg() {
     //if ($.app) {
     //  $.subt += $.app.error_code === '0' ? ', APP: 成功' : ', APP: 失败'
     //  $.desc.push(`APP端提示: ${$.app.error_msg}`)
-    }
+    // }
     $.msg($.name, $.subt, $.desc.join('\n'))
     resolve()
   })
