@@ -20,15 +20,15 @@ try {
     console.log(smzdm_id + " 获取到的Cookie：" + cookie);
 
     // 使用 Loon 原生 API 读取缓存
-    let cache = $persistentStore.read("#mincheng7_smzdm_cookie") || "[]";
+    let cache = $persistentStore.read("mincheng7_smzdm_cookie") || "[]";
     let json_data = JSON.parse(cache);
     
     updateOrAddObject(json_data, "smzdm_id", smzdm_id, "cookie", cookie);
     const cacheValue = JSON.stringify(json_data, null, "\t");
 
     // 使用 Loon 原生 API 写入缓存
-    $persistentStore.write(cookie, '#SMZDM_COOKIE');
-    $persistentStore.write(cacheValue, '#mincheng7_smzdm_cookie');
+    $persistentStore.write(cookie, 'SMZDM_COOKIE');
+    $persistentStore.write(cacheValue, 'mincheng7_smzdm_cookie');
     
     // 使用 Loon 原生 API 发送通知
     $notification.post('什么值得买 获取cookie成功✅', "", "账号ID: " + smzdm_id);
