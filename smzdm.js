@@ -30,13 +30,16 @@ function signweb() {
   return new Promise((resove) => {
     const url = { url: 'https://zhiyou.smzdm.com/user/checkin/jsonp_checkin', headers: {} }
     url.headers['Cookie'] = $.VAL_cookies
-    url.headers['Referer'] = 'http://www.smzdm.com/'
-    url.headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.132 Safari/537.36'
+    url.headers['Referer'] = 'https://www.smzdm.com/' // 换成https
+    // 换上最新的浏览器伪装 (User-Agent)
+    url.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     $.get(url, (err, resp, data) => {
       try {
         $.web = JSON.parse(data)
       } catch (e) {
-        $.logErr(e, resp)
+        // 增加防崩溃保护，如果被拦截，打印服务器返回了什么
+        $.log("【Web端】签到被拦截！返回内容：" + (data ? data.substring(0, 100) : '空'));
+        $.web = { error_code: -1, error_msg: "数据解析失败(可能被拦截)" };
       } finally {
         resove()
       }
@@ -52,14 +55,18 @@ function signapp() {
       body,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Cookie': $.VAL_cookies
+        'Cookie': $.VAL_cookies,
+        // 加上APP端的伪装，使用你抓包日志里的设备型号
+        'User-Agent': 'smzdm_ios_V11.1.70 rv:169.7 (iPhone 16 Pro; iOS 17.4.1; zh_CN)' 
       }
     }
     $.post(url, (err, resp, data) => {
       try {
         $.app = JSON.parse(data)
       } catch (e) {
-        $.logErr(e, resp)
+        // 增加防崩溃保护
+        $.log("【APP端】签到被拦截！返回内容：" + (data ? data.substring(0, 100) : '空'));
+        $.app = { error_code: '-1', error_msg: "数据解析失败(签名可能已失效)" };
       } finally {
         resove()
       }
@@ -68,8 +75,8 @@ function signapp() {
 }
 
 function getToken() {
-  const [, token] = $.VAL_cookies.match(/sess=(.*?);/)
-  return token
+  const match = $.VAL_cookies.match(/sess=(.*?);/);
+  return match ? match[1] : ''; // 增加容错，防止没匹配到时崩溃
 }
 
 function getAppSign(t) {
@@ -91,10 +98,13 @@ function showmsg() {
     $.subt = $.web.error_code === 0 ? 'PC: 成功' : $.web.error_code === 99 ? 'PC: 未登录' : 'PC: 失败'
     if ($.web.error_code === 0 && $.web.data) {
       $.desc.push(`累计: ${$.web.data.checkin_num}次, 经验: ${$.web.data.exp}, 金币: ${$.web.data.gold}, 积分: ${$.web.data.point}`)
+    } else if ($.web.error_msg) {
+      $.desc.push(`PC端提示: ${$.web.error_msg}`)
     }
+    
     if ($.app) {
       $.subt += $.app.error_code === '0' ? ', APP: 成功' : ', APP: 失败'
-      $.desc.push($.app.error_msg)
+      $.desc.push(`APP端提示: ${$.app.error_msg}`)
     }
     $.msg($.name, $.subt, $.desc.join('\n'))
     resolve()
