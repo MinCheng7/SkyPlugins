@@ -28,7 +28,7 @@ http-response ^https?:\/\/app\.bilibili\.com\/x\/resource\/fingerprint\? script-
 http-request https:\/\/appgw\.huazhu\.com\/game\/sign_header tag=华住会@Mincheng7, script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/scripts/hzh.js, requires-body=false, timeout=30, enable={hzh}
 
 # 什么值得买
-http-request ^https:\/\/user-api\.smzdm\.com\/users\/info script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/scripts/smzdm-cookie.js, timeout=60, tag=什么值得买@MinCheng7, enable={smzdm}
+http-request ^https:\/\/user-api\.smzdm\.com\/users\/info script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/scripts/smzdm.js, timeout=60, tag=什么值得买@MinCheng7, enable={smzdm}
 
 # 携程旅行
 http-response ^https:\/\/m\.ctrip\.com\/restapi\/soa2\/\d+\/[a-zA-Z]+Login(?:$|\?) script-path=https://raw.githubusercontent.com/NobyDa/Script/master/Ctrip-DailyBonus/Ctrip.js, requires-body=true, tag=携程旅行@NobyDa, enable={ctrip}
