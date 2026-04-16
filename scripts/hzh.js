@@ -18,27 +18,13 @@ https://raw.githubusercontent.com/evilbutcher/QuantumultX/main/check_in/hzh/hzh.
 【使用说明】
 进入华住会app的会员-签到页面获取Cookie。
 
-【Surge】
------------------
-[Script]
-华住会获取签到Cookie = type=http-request, pattern = https:\/\/appgw\.huazhu\.com\/game\/sign_header, script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js, requires-body=false
-华住会 = type=cron,cronexp=5 0 * * *,script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js
-
 【Loon】
 -----------------
 [Script]
-http-request https:\/\/appgw\.huazhu\.com\/game\/sign_header tag=华住会获取签到Cookie, script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js, requires-body=false
-cron "5 0 * * *" script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js, tag=华住会
+http-request https:\/\/appgw\.huazhu\.com\/game\/sign_header tag=华住会Cookie@MinCheng7, script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/scripts/hzh.js, requires-body=false
+cron "5 0 * * *" script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/scripts/hzh.js, tag=华住会
 
-【Quantumult X】
------------------
-[rewrite_local]
-https:\/\/appgw\.huazhu\.com\/game\/sign_header url script-request-header https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js
-
-[task_local]
-5 0 * * * https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/hzh.js, tag=华住会
-
-【All App MitM】
+【MitM】
 hostname = appgw.huazhu.com
 
 【Icon】
