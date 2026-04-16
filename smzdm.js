@@ -13,7 +13,7 @@ Original author: @chavyleung
 });
 
 const $ = new Env('什么值得买')
-$.VAL_cookies = $.getdata('#SMZDM_COOKIE')
+$.VAL_cookies = $.getdata('SMZDM_COOKIE')
 
 !(async () => {
   $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS
