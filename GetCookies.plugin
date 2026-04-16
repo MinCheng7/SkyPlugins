@@ -42,4 +42,4 @@ http-request ^https:\/\/user-api\.smzdm\.com\/users\/info script-path=https://ra
 http-response ^https:\/\/m\.ctrip\.com\/restapi\/soa2\/\d+\/[a-zA-Z]+Login(?:$|\?) script-path=https://raw.githubusercontent.com/NobyDa/Script/master/Ctrip-DailyBonus/Ctrip.js, requires-body=true, tag=携程旅行@NobyDa, enable={ctrip}
 
 [MITM]
-hostname = appgw.huazhu.com, hweb-mbf.huazhu.com, auth.alipan.com, auth.aliyundrive.com, c.tieba.baidu.com, tiebac.baidu.com, api.kkmh.com, m.ctrip.com, node.kg.qq.com, m.bilibili.com, api.bilibili.com, app.bilibili.com
+hostname = appgw.huazhu.com, hweb-mbf.huazhu.com, auth.alipan.com, auth.aliyundrive.com, c.tieba.baidu.com, tiebac.baidu.com, api.kkmh.com, m.ctrip.com, node.kg.qq.com, m.bilibili.com, api.bilibili.com, app.bilibili.com, user-api.smzdm.com, *.smzdm.com
