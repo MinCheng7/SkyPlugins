@@ -260,14 +260,14 @@ async function signBiliBili() {
 		$.log(`💸 投币时间: ${config.coins.time || "暂无"}`)
 
 		let expInfo = config.user.level_info.current_level < 6 
-    		? `经验:${config.user.level_info.current_exp}/下级${config.user.level_info.next_exp}/满级28800\n等级:当前${config.user.level_info.current_level}级 升满级最快需${Math.max(0, Math.ceil(config.user.v6_exp / 65))}天`
-    		: `经验:${config.user.level_info.current_exp} 丨Lv 6 (已满级)`;
+    		? `经验: ${config.user.level_info.current_exp}/下级${config.user.level_info.next_exp}/满级28800\n等级:当前${config.user.level_info.current_level}级 升满级最快需${Math.max(0, Math.ceil(config.user.v6_exp / 65))}天`
+    		: `经验: ${config.user.level_info.current_exp} 丨Lv 6 (已满级)`;
 
 		notice = {
-			title: `BiliBili [${config.user.uname}]`,
-			subTitle: `${flag ? "⭕ 今日任务已完成~" : "❗️ 有未完成的任务"}`,
+			title: `BiliBili「 ${config.user.uname}」`,
+			subTitle: `${flag ? "📃 今日任务已完成 ~ 🎉" : "❗️ 有未完成的任务"}`,
 			content:
-				expInfo + "\n" + (silverLogMsg || "") + `硬币数量: ${Math.floor(config.user.money)} 🪙\n` + (typeof chargeLogMsg !== 'undefined' ? chargeLogMsg : "") + vipMessage
+				expInfo + "\n" + (silverLogMsg || "") + `硬币数量: ${Math.floor(config.user.money)} 🪙\n` + (typeof chargeLogMsg !== 'undefined' ? chargeLogMsg : "")
 		}
 		$.msg(notice.title, notice.subTitle, notice.content)
 	} else {
