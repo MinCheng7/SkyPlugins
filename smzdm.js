@@ -1,7 +1,7 @@
 /*
 Author: @MinCheng7
 Original author: @chavyleung
-做了自用的适配
+修改内容：做了自用的适配丨取消掉App端签到，只保留PC端|通知样式
 */
 // prettier-ignore
 !function (t, r) { "object" == typeof exports ? module.exports = exports = r() : "function" == typeof define && define.amd ? define([], r) : t.CryptoJS = r() }(this, function () {
@@ -18,10 +18,29 @@ $.VAL_cookies = $.getdata('SMZDM_COOKIE')
 !(async () => {
   $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS
 
+  // 1. 获取今天的日期
+  const today = new Date().toLocaleDateString('zh-CN', { timeZone: 'Asia/Shanghai' });
+  // 2. 读取本地缓存的“上次签到日期”
+  const lastSignDate = $.getdata('mincheng7_smzdm_last_sign');
+
+  // 3. 拦截判断：如果记录的日期和今天一样，说明已经签过了
+  if (lastSignDate === today) {
+    $.log('检测到今日已签到，跳过网络请求。');
+    $.msg($.name, '今日已签到 🎉', '您今天已经成功签到过了，无需重复运行。');
+    return; // 提前结束脚本，不再发请求给什么值得买服务器
+  }
+
+  // 没签到过，开始执行签到
   await signweb()
-  await $.wait(4000)
-  await signapp()
+  await $.wait(1000)
+  // await signapp() // APP签到依然保持注释状态
   await showmsg()
+
+  // 4. 如果刚刚签到成功，把今天的日期存进缓存，作为下次的判断依据
+  if ($.web && $.web.error_code === 0) {
+    $.setdata(today, 'mincheng7_smzdm_last_sign');
+  }
+
 })()
   .catch((e) => $.logErr(e))
   .finally(() => $.done())
@@ -95,16 +114,16 @@ function showmsg() {
   return new Promise((resolve) => {
     $.subt = ''
     $.desc = []
-    $.subt = $.web.error_code === 0 ? 'PC: 成功' : $.web.error_code === 99 ? 'PC: 未登录' : 'PC: 失败'
+    $.subt = $.web.error_code === 0 ? 'PC端 签到成功✅' : $.web.error_code === 99 ? 'PC: 未登录❗' : 'PC: 签到失败❌'
     if ($.web.error_code === 0 && $.web.data) {
-      $.desc.push(`累计: ${$.web.data.checkin_num}次, 经验: ${$.web.data.exp}, 金币: ${$.web.data.gold}, 积分: ${$.web.data.point}`)
+      $.desc.push(`累计签到: ${$.web.data.checkin_num}天, 获得经验: ${$.web.data.exp}, 金币: ${$.web.data.gold}, 积分: ${$.web.data.point}`)
     } else if ($.web.error_msg) {
       $.desc.push(`PC端提示: ${$.web.error_msg}`)
     }
     
-    if ($.app) {
-      $.subt += $.app.error_code === '0' ? ', APP: 成功' : ', APP: 失败'
-      $.desc.push(`APP端提示: ${$.app.error_msg}`)
+    //if ($.app) {
+    //  $.subt += $.app.error_code === '0' ? ', APP: 成功' : ', APP: 失败'
+    //  $.desc.push(`APP端提示: ${$.app.error_msg}`)
     }
     $.msg($.name, $.subt, $.desc.join('\n'))
     resolve()
