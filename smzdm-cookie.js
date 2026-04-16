@@ -17,7 +17,7 @@ try {
     let match = cookie.match(regex);
     let smzdm_id = match ? match[1] : "";
     
-    console.log(smzdm_id + " 获取到的数据：" + cookie);
+    console.log(smzdm_id + " 获取到的Cookie：" + cookie);
 
     // 使用 Loon 原生 API 读取缓存
     let cache = $persistentStore.read("#mincheng7_smzdm_cookie") || "[]";
@@ -32,7 +32,6 @@ try {
     
     // 使用 Loon 原生 API 发送通知
     $notification.post('什么值得买 获取cookie成功✅', "", "账号ID: " + smzdm_id);
-    console.log('什么值得买 获取到的ck为：' + cookie);
   }
 } catch (e) {
   console.log('脚本运行出现错误：' + e.message);
