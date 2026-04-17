@@ -19,9 +19,9 @@ Author：@NobyDa
 const $ = new Env('Bahamut每日签到');
 
 // 用户信息
-$.uid = $.getdata('BahaUID') || $.getdata('@ND_BAHA.ID') || '';
-$.pwd = $.getdata('BahaPWD') || $.getdata('@ND_BAHA.PW') || '';
-$.totp = $.getdata('BahaTOTP') || $.getdata('@ND_BAHA.TOTP') || '';
+$.uid = $.getdata('BahaUID')  || '';
+$.pwd = $.getdata('BahaPWD') || '';
+$.totp = $.getdata('BahaTOTP') || '';
 
 // 开关选项
 const ads = $.getdata('SignAds') || $.getdata('@ND_BAHA.ADS');
