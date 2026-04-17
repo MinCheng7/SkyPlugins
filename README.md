@@ -7,9 +7,13 @@
 解决了华住会获取cookie时usertoken空白而导致无法签到的问题
 
 # 哔哩哔哩每日任务
-Fork From：[MartinsKing](https://github.com/clydetime)，Loon插件地址：[BiliDailyBonus](https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/plugins/BiliDailyBonus.plugin)
+Fork from：[MartinsKing](https://github.com/clydetime)，Loon插件地址：[BiliDailyBonus](https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/plugins/BiliDailyBonus.plugin)
 
-修改内容：只保留扫码获取cookie；满级用户不再提示升级相关通知；直接在插件内配置；优化通知样式...
+修改内容：只保留扫码获取cookie；满级用户不再提示升级相关通知；直接在插件内配置；更改通知和日志样式
 
+# 巴哈姆特每日签到答题
+Fork from：[NobyDa](https://github.com/clydetime)，Loon插件地址：[Bahamut](https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/plugins/Bahamut.plugin)
+
+修改内容：直接在插件内配置丨更改通知样式
 
 
