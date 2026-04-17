@@ -1,0 +1,23 @@
+#!name=巴哈姆特每日签到
+#!desc=自动完成巴哈姆特主站签到、公会签到及动画疯答题。请在插件内配置账号信息及任务开关。
+#!author=MinCheng7[https://github.com/MinCheng7]
+#!homepage= https://github.com/MinCheng7/SkyPlugins
+#!icon=https://raw.githubusercontent.com/MinCheng7/icons/refs/heads/main/logo/bahamut.png
+
+[Argument]
+# 运行时间设置
+RunTime = input, "0 10 * * *", tag=脚本执行时间, desc=请填写标准的 Cron 表达式。默认每天上午 10:00 执行（建议不要在凌晨，以免获取不到动画疯答案）。
+
+# 账号密码设置
+BahaUID = input, "", tag=[账号] 用户名, desc=请填写您的巴哈姆特账号。
+BahaPWD = input, "", tag=[账号] 密码, desc=请填写您的巴哈姆特密码。
+BahaTOTP = input, "", tag=[账号] 两步验证 Token, desc=16位两步验证Token，未开启请留空。
+
+# 任务开关设置
+SignAds = switch, false, tag=广告签到, desc=是否开启广告签到（需要观看 30 秒广告，耗时较长，默认关闭）。
+SignGuild = switch, true, tag=公会签到, desc=是否自动签到已加入的公会。
+AutoAnswer = switch, true, tag=动画疯答题, desc=是否自动完成动画疯每日答题。
+
+[Script]
+# 请将下方 script-path 的链接替换为你自己托管在 Github 上的真实 js 文件地址
+cron {RunTime} script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/bahamut.js, wake-system=1, timeout=300, tag=巴哈姆特每日任务@MinCheng7
