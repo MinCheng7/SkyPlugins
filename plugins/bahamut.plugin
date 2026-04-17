@@ -9,9 +9,9 @@
 RunTime = input, "0 10 * * *", tag=脚本执行时间, desc=请填写标准的 Cron 表达式。默认每天上午 10:00 执行（建议不要在凌晨，以免获取不到动画疯答案）。
 
 # 账号密码设置
-BahaUID = input, '', tag=用户名, desc=请填写您的巴哈姆特账号。
-BahaPWD = input, '', tag=密码, desc=请填写您的巴哈姆特密码。
-BahaTOTP = input, '', tag=(可选) 两步验证Token, desc=16位两步验证Token，未开启请留空。
+BahaUID = input, "", tag=用户名, desc=请填写您的巴哈姆特账号。
+BahaPWD = input, "", tag=密码, desc=请填写您的巴哈姆特密码。
+BahaTOTP = input, "", tag=(可选) 两步验证Token, desc=16位两步验证Token，未开启请留空。
 
 # 任务开关设置
 SignAds = switch, false, tag=广告签到, desc=是否开启广告签到（需要观看 30 秒广告，耗时较长，默认关闭）。
