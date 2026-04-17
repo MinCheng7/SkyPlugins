@@ -18,39 +18,26 @@ Author：@NobyDa
 
 const $ = new Env('Bahamut每日签到');
 
-// 新增：智能参数解析器，完美适配 Loon 插件 UI 的数据传递
-function getPluginArg(key, defaultVal = '') {
-    let val = $.getval(key);
-    // 如果没有读取到，返回设定的默认值
-    if (val === null || val === undefined || val === "") {
-        return defaultVal;
-    }
-    if (typeof val === 'string') {
-        let cleanVal = val.trim(); // 仅去除首尾空格，保留密码中的所有特殊符号
-        if (cleanVal.toLowerCase() === 'true') return true;
-        if (cleanVal.toLowerCase() === 'false') return false;
-        return cleanVal;
-    }
-    return val;
-}
-
 // 用户名
-$.uid = getPluginArg('BahaUID');
+$.uid = $.getval('BahaUID') || '';
 
 // 用户密码
-$.pwd = getPluginArg('BahaPWD');
+$.pwd = $.getval('BahaPWD') || '';
 
 // 两步验证Token, 16位数, 未设置请留空
-$.totp = getPluginArg('BahaTOTP');
+$.totp = $.getval('BahaTOTP') || '';
 
 // 是否开启广告签到，true/false，默认关闭 (该功能耗时过长)
-$.needSignAds = getPluginArg('SignAds', false);
+const ads = $.getval('SignAds');
+$.needSignAds = (ads === 'true' || ads === true);
 
 // 是否自动签到公会，true/false，默认开启
-$.needSignGuild = getPluginArg('SignGuild', true);
+const guild = $.getval('SignGuild');
+$.needSignGuild = (guild !== 'false' && guild !== false); // 默认开启
 
 // 是否自动答题动画疯，true/false，默认开启 (不保证100%答题正确)
-$.needAnswer = getPluginArg('AutoAnswer', true);
+const answer = $.getval('AutoAnswer');
+$.needAnswer = (answer !== 'false' && answer !== false); // 默认开启
 
 //Bark APP 通知推送Key
 $.barkKey = '';
