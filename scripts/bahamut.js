@@ -64,7 +64,7 @@ $.hasError = false;
         const subTitle = $.hasError ? '❗️ 存在未完成的任务或异常' : '🎉 签到及答题任务全部完成 ~';
 		$.msg($.name, subTitle, $.notifyMsg.join('\n'), {
 			'open-url': 'crazyanime://', //动画疯url scheme
-			'media-url': 'https://cdn.jsdelivr.net/gh/NobyDa/mini@master/Color/bahamutClear.png' //通知图片
+			'media-url': 'https://raw.githubusercontent.com/MinCheng7/icons/refs/heads/main/logo/bahamut.png' //通知图片
 		}); //带上总结推送通知
 		$.done(); //调用Surge、QX内部特有的函数, 用于退出脚本执行
 	});
