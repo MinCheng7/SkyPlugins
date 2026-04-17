@@ -19,16 +19,16 @@ Author：@NobyDa
 const $ = new Env('Bahamut每日签到');
 
 // 用户信息
-$.uid = argument.BahaUID || '';
-$.pwd = argument.BahaPWD || '';
-$.totp = argument.BahaTOTP || '';
+$.uid = $argument.BahaUID || '';
+$.pwd = $argument.BahaPWD || '';
+$.totp = $argument.BahaTOTP || '';
 
 // 广告签到开关 (默认关闭, 需要在Loon配置里把SignAds设置为true才会开启)
-$.needSignAds = (argument.SignAds === 'true' || argument.SignAds === true);
+$.needSignAds = ($argument.SignAds === 'true' || $argument.SignAds === true);
 
 // 公会和答题默认开启，只有明确选了 false 才关闭
-$.needSignGuild = (argument.SignGuild !== 'false' && argument.SignGuild !== false); 
-$.needAnswer = (argument.AutoAnswer !== 'false' && argument.AutoAnswer !== false);
+$.needSignGuild = ($argument.SignGuild !== 'false' && $argument.SignGuild !== false); 
+$.needAnswer = ($argument.AutoAnswer !== 'false' && $argument.AutoAnswer !== false);
 //Bark APP 通知推送Key
 $.barkKey = '';
 
