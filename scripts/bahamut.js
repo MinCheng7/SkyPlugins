@@ -19,24 +19,24 @@ Author：@NobyDa
 const $ = new Env('Bahamut每日签到');
 
 // 用户名
-$.uid = $.getval('BahaUID') || '';
+$.uid = $.getdata('BahaUID') || '';
 
 // 用户密码
-$.pwd = $.getval('BahaPWD') || '';
+$.pwd = $.getdata('BahaPWD') || '';
 
 // 两步验证Token, 16位数, 未设置请留空
-$.totp = $.getval('BahaTOTP') || '';
+$.totp = $.getdata('BahaTOTP') || '';
 
 // 是否开启广告签到，true/false，默认关闭 (该功能耗时过长)
-const ads = $.getval('SignAds');
+const ads = $.getdata('SignAds');
 $.needSignAds = (ads === 'true' || ads === true);
 
 // 是否自动签到公会，true/false，默认开启
-const guild = $.getval('SignGuild');
+const guild = $.getdata('SignGuild');
 $.needSignGuild = (guild !== 'false' && guild !== false); // 默认开启
 
 // 是否自动答题动画疯，true/false，默认开启 (不保证100%答题正确)
-const answer = $.getval('AutoAnswer');
+const answer = $.getdata('AutoAnswer');
 $.needAnswer = (answer !== 'false' && answer !== false); // 默认开启
 
 //Bark APP 通知推送Key
