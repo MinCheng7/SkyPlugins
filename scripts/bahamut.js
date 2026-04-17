@@ -19,26 +19,29 @@ Author：@NobyDa
 const $ = new Env('Bahamut每日签到');
 
 // 新增：智能参数解析器，完美适配 Loon 插件 UI 的数据传递
-function getPluginArg(key, defaultVal) {
+function getPluginArg(key, defaultVal = '') {
     let val = $.getval(key);
-    if (val === null || val === undefined || val === "") return defaultVal;
+    // 如果没有读取到，返回设定的默认值
+    if (val === null || val === undefined || val === "") {
+        return defaultVal;
+    }
     if (typeof val === 'string') {
-        let cleanVal = val.replace(/"/g, '').trim();
+        let cleanVal = val.trim(); // 仅去除首尾空格，保留密码中的所有特殊符号
         if (cleanVal.toLowerCase() === 'true') return true;
         if (cleanVal.toLowerCase() === 'false') return false;
-        return cleanVal; // 账号、密码、Token 等保持纯文本字符串返回
+        return cleanVal;
     }
     return val;
 }
 
 // 用户名
-$.uid = getPluginArg('BahaUID', '');
+$.uid = getPluginArg('BahaUID');
 
 // 用户密码
-$.pwd = getPluginArg('BahaPWD', '');
+$.pwd = getPluginArg('BahaPWD');
 
 // 两步验证Token, 16位数, 未设置请留空
-$.totp = getPluginArg('BahaTOTP', '');
+$.totp = getPluginArg('BahaTOTP');
 
 // 是否开启广告签到，true/false，默认关闭 (该功能耗时过长)
 $.needSignAds = getPluginArg('SignAds', false);
