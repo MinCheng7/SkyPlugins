@@ -85,18 +85,6 @@ const baseHeaders = {
 	'cookie': config.cookieStr
 }
 
-// 辅助函数：安全获取 Loon 插件参数，完美解决字符串/空值/引号问题
-function getPluginArg(key, defaultVal) {
-	let val = $.getItem(key);
-	if (val === null || val === undefined || val === "") return defaultVal;
-	if (typeof val === 'string') {
-		val = val.replace(/"/g, '').trim(); // 去除可能的引号和空格
-		if (val.toLowerCase() === 'true') return true;
-		if (val.toLowerCase() === 'false') return false;
-		if (!isNaN(val)) return Number(val);
-	}
-	return val;
-}
 
 !(async () => {
 	if ("object" === typeof $response) {
@@ -139,12 +127,12 @@ async function getCookie() {
 
 async function signBiliBili() {
 	if (config.cookie && await me()) {
-		// 集中读取全部插件配置参数
-		const exec_times = getPluginArg("CoinNum", Number(config.Settings?.exec ?? 5));
-		const s2cSwitch = getPluginArg("Silver2Coin", false);
-		const chargeSwitch = getPluginArg("AutoCharge", false);
-		const customMid = getPluginArg("ChargeMid", "");
-		const customBP = getPluginArg("ChargeBP", "");
+		// 集中读取全部插件配置参数 (使用 Loon 原生 $argument)
+		const exec_times = ($argument.CoinNum !== undefined && $argument.CoinNum !== "") ? Number($argument.CoinNum) : Number(config.Settings?.exec ?? 5);
+		const s2cSwitch = ($argument.Silver2Coin === 'true' || $argument.Silver2Coin === true);
+		const chargeSwitch = ($argument.AutoCharge === 'true' || $argument.AutoCharge === true);
+		const customMid = $argument.ChargeMid || "";
+		const customBP = $argument.ChargeBP || "";
 
 		// 传入动态投币数量，以便日志准确显示
 		await queryStatus(exec_times);
