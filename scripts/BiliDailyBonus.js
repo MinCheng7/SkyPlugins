@@ -1017,21 +1017,48 @@ async function vipPrivilege(type) {
 	})
 }
 
+// 根据 UID 获取 UP 主真实昵称
+async function getTargetName(mid) {
+	const myRequest = {
+		url: `https://api.bilibili.com/x/web-interface/card?mid=${mid}`,
+		headers: { ...baseHeaders }
+	}
+	return await $.fetch(myRequest).then(response => {
+		try {
+			const body = $.toObj(response.body)
+			// 如果成功查到，返回真实昵称
+			if (body?.code === 0 && body?.data?.card?.name) {
+				return body.data.card.name;
+			}
+			return "神秘UP主"; // 接口异常时的兜底词汇
+		} catch (e) {
+			return "神秘UP主";
+		}
+	})
+}
+
 async function Charge(mid, bp_num) {
-	$.log("\n---- ⚡B币券自动充电 ----")
+	$.log("\n---- 🔋 B币券自动充电 ----")
 	let chargeMessage = ''; 
 	
-	// 获取当前账号的 B币余额
+	// 1. 数据校验与清洗：确保充电B币数是一个合法的正整数
+	const bpToCharge = Math.floor(Number(bp_num)); // 强制转为数字，并向下取整（过滤小数）
+	if (isNaN(bpToCharge) || bpToCharge <= 0) {
+		$.log(`❕ 充电失败, 设置的B币数[${bp_num}]无效，必须是大于0的整数`);
+		return ""; // 停止执行，静默退出
+	}
+
+	// 2. 获取当前账号的 B币余额
 	const currentBCoin = config.user.wallet.bcoin_balance || 0;
 	
-	// 逻辑判断：如果余额小于设置的充电数，则停止执行并仅记录日志
-	if (currentBCoin < bp_num) {
-		$.log(`❕ B币数不足 (${currentBCoin})，暂停充电`);
-		return ""; // 返回空字符串，通知中将不显示此行
+	// 3. 逻辑判断：如果余额小于设置的合法充电数，则停止执行
+	if (currentBCoin < bpToCharge) {
+		$.log(`❕ B币数不足 (${currentBCoin} < ${bpToCharge})，暂停充电`);
+		return ""; // 停止执行，静默退出
 	}
 
 	const body = {
-		bp_num,
+		bp_num: bpToCharge, // 使用清洗后的干净数字发起请求
 		is_bp_remains_prior: true,
 		up_mid: mid,
 		otype: 'up',
@@ -1049,9 +1076,12 @@ async function Charge(mid, bp_num) {
 			const body = $.toObj(response.body)
 			if (body?.code === 0) {
 				if (body?.data?.status === 4) {
-					let targetName = (mid == config.user.mid) ? config.user.uname : mid;
-					$.log(`⭕ 为[${targetName}]充电成功 ~`)
-					chargeMessage = `⭕ 为[${targetName}]充电成功 ~\n`; 
+					// 核心修改：如果是自己，直接用本地存的名字；如果是别人，调用接口去查真实名字
+					let name = (mid == config.user.mid) ? config.user.uname : await getTargetName(mid);
+					let targetDisplay = `${name}|${mid}`;
+					
+					$.log(`⭕ 为 [${targetDisplay}] 充电成功 ~`)
+					chargeMessage = `⭕ 为 [${targetDisplay}] 充电成功 ~\n`; 
 				} else if (body?.data?.status === -4) {
 					$.log("❌ 充电失败, B币不足")
 					chargeMessage = `自动充电: B币不足 ❌\n`; 
