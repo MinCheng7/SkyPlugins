@@ -10,7 +10,7 @@
 cron "40 8 * * *" script-path=https://raw.githubusercontent.com/NobyDa/Script/master/BDTieBa-DailyBonus/TieBa.js, timeout=300, tag=百度贴吧签到@NobyDa
 
 # 巴哈姆特
-cron "0 8 * * *" script-path=https://raw.githubusercontent.com/NobyDa/Script/master/Bahamut/BahamutDailyBonus.js, timeout=300, tag=巴哈姆特签到@NobyDa
+cron "0 8 * * *" script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/scripts/bahamut.js, timeout=300, tag=巴哈姆特签到@MinCheng7
 
 # 华住会
 cron "0 7 * * *" script-path=https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/scripts/hzh.js, timeout=300, tag=华住会签到@Mincheng7
