@@ -18,6 +18,8 @@ Author：@NobyDa
 
 const $ = new Env('Bahamut每日签到');
 
+argument=[{BahaUID},{BahaPWD},{BahaTOTP},{SignAds},{SignGuild},{AutoAnswer}]
+
 // 用户信息
 $.uid = $argument.BahaUID || '';
 $.pwd = $argument.BahaPWD || '';
@@ -34,9 +36,6 @@ $.barkKey = '';
 
 // 为通知准备的空数组
 $.notifyMsg = [];
-
-// 🔥 核心排错神器：把读取到的账号密码直接打印在日志里（跑完确认没问题后可以删掉下面这行）
-$.log('', '🔍 【参数读取测试】', `读到的账号: ->${$.uid}<-`, `读到的密码: ->${$.pwd}<-`);
 
 // 新增：全局错误标记，用于动态生成通知副标题
 $.hasError = false;
