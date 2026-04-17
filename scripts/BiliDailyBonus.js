@@ -9,7 +9,7 @@
 	Ⅱ. cookie获取完成后建议关闭插件内的cookie开关;
 	Ⅲ. 账号内须有一定数量的关注数，否则无法完成投币;
 	Ⅳ. 年度大会员每月B币券会在每月1号、15号尝试领取，确保应用正常运行, 以防漏领;
-	Ⅴ. 自动充电在每次领劵之后进行, 默认为自己充电, 可在插件内设置为其他用户充电;
+	Ⅴ. 自动充电在[B币剩余数量]大于[设置的充电B币数量]时进行, 默认为自己充电, 可在插件内设置为其他用户充电;
 	Ⅵ. 如果需要修改投币数量, 请在插件内设置, 没有设置则默认5个, 已经设置的优先使用插件内的设置;
 	Ⅶ. 脚本执行时间的参数填写标准的Cron表达式。例如 "40 7 * * *" 表示每天早上 7:40 执行，依次为 "分 时 天 月 年"。
 使用声明: ⚠️此脚本仅供学习与交流，请勿贩卖！⚠️
@@ -237,20 +237,21 @@ async function signBiliBili() {
 					for (const {code, title} of privileges) await vipPrivilege(code) && (code === 1 ? $.msg(title, "🎉🎉🎉领取成功", `🎉 领取${title}成功`) : $.log(`🎉 领取${title}成功`))
 					await $.wait(800) 
                     
-					let chargeLogMsg = ''; 
-					if (chargeSwitch) {
-						const finalMid = (customMid !== "") ? customMid : (config.Settings?.charge_mid || config.user.mid);
-						const finalBP = (customBP !== "") ? Number(customBP) : (config.Settings?.bp_num || 5);
-						chargeLogMsg = await Charge(finalMid, finalBP); 
-					} else {
-						$.log("\n跳过自动充电任务（未启用）");
-					}
 				} else {
 					for (const code of [6, 7]) await vipPrivilege(code) && $.log(`- 领取${privileges.find(p => p.code === code).title}成功`)
 				}
-			} 
+			}
 		}
-		flag = !isNotComplete(exec_times)
+			let chargeLogMsg = ''; 
+			if (chargeSwitch) {
+				const finalMid = (customMid !== "") ? customMid : (config.Settings?.charge_mid || config.user.mid);
+				const finalBP = (customBP !== "") ? Number(customBP) : (config.Settings?.bp_num || 5);
+				// 此时会调用带有余额判定的新 Charge 函数
+				chargeLogMsg = await Charge(finalMid, finalBP); 
+			} else {
+				$.log("\n跳过自动充电任务（未启用）");
+			}
+			flag = !isNotComplete(exec_times)
 		let title = `---- 🗒️ ${$.name} ----\n登录${config.user.num}丨观看${config.watch.num}丨分享${config.share.num}丨投币${config.coins.num / 10}${flag ? " 已完成 🎉" : " 未完成 ❗"}`
 		$.log(`\n ${title}`)
 		$.log(`📺 登录时间: ${config.user.time || "暂无"}`)
@@ -1018,7 +1019,17 @@ async function vipPrivilege(type) {
 
 async function Charge(mid, bp_num) {
 	$.log("\n---- ⚡B币券自动充电 ----")
-    let chargeMessage = ''; 
+	let chargeMessage = ''; 
+	
+	// 获取当前账号的 B币余额
+	const currentBCoin = config.user.wallet.bcoin_balance || 0;
+	
+	// 逻辑判断：如果余额小于设置的充电数，则停止执行并仅记录日志
+	if (currentBCoin < bp_num) {
+		$.log(`❕ B币数不足 (${currentBCoin})，暂停充电`);
+		return ""; // 返回空字符串，通知中将不显示此行
+	}
+
 	const body = {
 		bp_num,
 		is_bp_remains_prior: true,
@@ -1029,36 +1040,35 @@ async function Charge(mid, bp_num) {
 	}
 	const myRequest = {
 		url: 'https://api.bilibili.com/x/ugcpay/web/v2/trade/elec/pay/quick',
-		headers: {
-			...baseHeaders
-		},
+		headers: { ...baseHeaders },
 		body: $.queryStr(body)
 	}
-	await $.fetch(myRequest).then(response => {
+
+	return await $.fetch(myRequest).then(response => {
 		try {
 			const body = $.toObj(response.body)
 			if (body?.code === 0) {
 				if (body?.data?.status === 4) {
-                    let targetName = (mid == config.user.mid) ? config.user.uname : mid;
-					$.log(`⭕ 为[${targetName}]充电成功`)
-                    chargeMessage = `为[${targetName}]充电成功 ⭕\n`; 
+					let targetName = (mid == config.user.mid) ? config.user.uname : mid;
+					$.log(`⭕ 为[${targetName}]充电成功 ~`)
+					chargeMessage = `⭕ 为[${targetName}]充电成功 ~\n`; 
 				} else if (body?.data?.status === -4) {
 					$.log("❌ 充电失败, B币不足")
-                    chargeMessage = `自动充电: B币不足 ❌\n`; 
+					chargeMessage = `自动充电: B币不足 ❌\n`; 
 				} else {
 					$.log("❌ 充电失败，" + body?.message)
-                    chargeMessage = `自动充电: ${body.message} ❌\n`; 
+					chargeMessage = `自动充电: ${body.message} ❌\n`; 
 				}
 			} else {
 				$.log("❌ 充电失败，" + body?.message)
-                chargeMessage = `自动充电: ${body.message} ❌\n`; 
+				chargeMessage = `自动充电: ${body.message} ❌\n`; 
 			}
 		} catch (e) {
 			$.logErr(e, response)
-            chargeMessage = `自动充电: 执行异常 ❌\n`; 
+			chargeMessage = `自动充电: 执行异常 ❌\n`; 
 		}
+		return chargeMessage;
 	})
-    return chargeMessage; 
 }
 
 async function me() {
