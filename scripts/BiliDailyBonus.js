@@ -260,15 +260,25 @@ async function signBiliBili() {
 
 		let expInfo = config.user.level_info.current_level < 6 
     		? `经验: ${config.user.level_info.current_exp}/下级${config.user.level_info.next_exp}/满级28800\n等级:当前${config.user.level_info.current_level}级 升满级最快需${Math.max(0, Math.ceil(config.user.v6_exp / 65))}天`
-    		: `经验: ${config.user.level_info.current_exp} 丨Lv 6 (已满级)`;
+    		: `经验: ${config.user.level_info.current_exp} 丨 Lv 6 (已满级)`;
+
+		// 核心优化：使用数组拼接文本，利用 trim() 消除自带的隐藏换行符，完美杜绝空行
+		let contentArr = [expInfo];
+		if (silverLogMsg) contentArr.push(silverLogMsg.trim());
+		contentArr.push(`硬币数量: ${Math.floor(config.user.money)} 🪙`);
+		if (typeof chargeLogMsg !== 'undefined' && chargeLogMsg) contentArr.push(chargeLogMsg.trim());
 
 		notice = {
-			title: `BiliBili「 ${config.user.uname}」`,
+			title: `BiliBili「${config.user.uname}」`,
 			subTitle: `${flag ? "⭕ 今日任务已完成 ~" : "❗️ 有未完成的任务"}`,
-			content:
-				expInfo + "\n" + (silverLogMsg || "") + `硬币数量: ${Math.floor(config.user.money)} 🪙\n` + (typeof chargeLogMsg !== 'undefined' ? chargeLogMsg : "")
+			content: contentArr.join('\n')
 		}
-		$.msg(notice.title, notice.subTitle, notice.content)
+		
+		// 增加媒体图片及点击跳转协议
+		$.msg(notice.title, notice.subTitle, notice.content, {
+			'open-url': 'bilibili://', // 点击通知直接打开 B 站客户端
+			'media-url': 'https://raw.githubusercontent.com/MinCheng7/icons/refs/heads/main/logo/2233-2.jpg' // B 站专属图标
+		})
 	} else {
 		$.msg(`❌ ${$.name} 任务失败`,`📅 ${startTime}`, "🤒请更新cookie")
 	}
