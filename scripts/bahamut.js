@@ -18,32 +18,29 @@ Author：@NobyDa
 
 const $ = new Env('Bahamut每日签到');
 
-// 用户名
-$.uid = $.getdata('BahaUID') || '';
+// 用户信息
+$.uid = $.getdata('BahaUID') || $.getdata('@ND_BAHA.ID') || '';
+$.pwd = $.getdata('BahaPWD') || $.getdata('@ND_BAHA.PW') || '';
+$.totp = $.getdata('BahaTOTP') || $.getdata('@ND_BAHA.TOTP') || '';
 
-// 用户密码
-$.pwd = $.getdata('BahaPWD') || '';
-
-// 两步验证Token, 16位数, 未设置请留空
-$.totp = $.getdata('BahaTOTP') || '';
-
-// 是否开启广告签到，true/false，默认关闭 (该功能耗时过长)
-const ads = $.getdata('SignAds');
+// 开关选项
+const ads = $.getdata('SignAds') || $.getdata('@ND_BAHA.ADS');
 $.needSignAds = (ads === 'true' || ads === true);
 
-// 是否自动签到公会，true/false，默认开启
-const guild = $.getdata('SignGuild');
-$.needSignGuild = (guild !== 'false' && guild !== false); // 默认开启
+const guild = $.getdata('SignGuild') || $.getdata('@ND_BAHA.GUILD');
+$.needSignGuild = (guild !== 'false' && guild !== false); 
 
-// 是否自动答题动画疯，true/false，默认开启 (不保证100%答题正确)
-const answer = $.getdata('AutoAnswer');
-$.needAnswer = (answer !== 'false' && answer !== false); // 默认开启
+const answer = $.getdata('AutoAnswer') || $.getdata('@ND_BAHA.ANSWER');
+$.needAnswer = (answer !== 'false' && answer !== false); 
 
 //Bark APP 通知推送Key
 $.barkKey = '';
 
 // 为通知准备的空数组
 $.notifyMsg = [];
+
+// 🔥 核心排错神器：把读取到的账号密码直接打印在日志里（跑完确认没问题后可以删掉下面这行）
+$.log('', '🔍 【参数读取测试】', `读到的账号: ->${$.uid}<-`, `读到的密码: ->${$.pwd}<-`);
 
 // 新增：全局错误标记，用于动态生成通知副标题
 $.hasError = false;
