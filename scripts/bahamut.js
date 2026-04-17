@@ -18,20 +18,20 @@ Author：@NobyDa
 
 const $ = new Env('Bahamut每日签到');
 
+// 接入 Loon 官方 $argument 参数对象 (增加防呆保护，防止单独测试时报错)
+const args = typeof $argument !== 'undefined' ? $argument : {};
+
 // 用户信息
-$.uid = $.getdata('BahaUID')  || '';
-$.pwd = $.getdata('BahaPWD') || '';
-$.totp = $.getdata('BahaTOTP') || '';
+$.uid = args.BahaUID || '';
+$.pwd = args.BahaPWD || '';
+$.totp = args.BahaTOTP || '';
 
-// 开关选项
-const ads = $.getdata('SignAds') || $.getdata('@ND_BAHA.ADS');
-$.needSignAds = (ads === 'true' || ads === true);
+// 广告签到开关 (默认关闭, 需要在Loon配置里把SignAds设置为true才会开启)
+$.needSignAds = (args.SignAds === 'true' || args.SignAds === true);
 
-const guild = $.getdata('SignGuild') || $.getdata('@ND_BAHA.GUILD');
-$.needSignGuild = (guild !== 'false' && guild !== false); 
-
-const answer = $.getdata('AutoAnswer') || $.getdata('@ND_BAHA.ANSWER');
-$.needAnswer = (answer !== 'false' && answer !== false); 
+// 公会和答题默认开启，只有明确选了 false 才关闭
+$.needSignGuild = (args.SignGuild !== 'false' && args.SignGuild !== false); 
+$.needAnswer = (args.AutoAnswer !== 'false' && args.AutoAnswer !== false);
 
 //Bark APP 通知推送Key
 $.barkKey = '';
