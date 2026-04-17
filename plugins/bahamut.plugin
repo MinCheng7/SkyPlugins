@@ -3,6 +3,7 @@
 #!author=MinCheng7[https://github.com/MinCheng7]
 #!homepage= https://github.com/MinCheng7/SkyPlugins
 #!icon=https://raw.githubusercontent.com/MinCheng7/icons/refs/heads/main/logo/bahamut.png
+#!tag=签到
 
 [Argument]
 # 运行时间设置
