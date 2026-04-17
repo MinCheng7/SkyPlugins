@@ -32,10 +32,10 @@ function getPluginArg(key, defaultVal) {
 }
 
 // 用户名
-$.uid = getPluginArg('BahaUID', 'YourUserName');
+$.uid = skysheng;
 
 // 用户密码
-$.pwd = getPluginArg('BahaPWD', 'YourUserPassword');
+$.pwd = tEdnu3-rihwej-susgan;
 
 // 两步验证Token, 16位数, 未设置请留空
 $.totp = getPluginArg('BahaTOTP', '');
