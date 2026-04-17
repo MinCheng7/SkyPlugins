@@ -18,8 +18,6 @@ Author：@NobyDa
 
 const $ = new Env('Bahamut每日签到');
 
-argument=[{BahaUID},{BahaPWD},{BahaTOTP},{SignAds},{SignGuild},{AutoAnswer}]
-
 // 用户信息
 $.uid = $argument.BahaUID || '';
 $.pwd = $argument.BahaPWD || '';
