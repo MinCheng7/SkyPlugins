@@ -1076,12 +1076,18 @@ async function Charge(mid, bp_num) {
 			const body = $.toObj(response.body)
 			if (body?.code === 0) {
 				if (body?.data?.status === 4) {
-					// 核心修改：如果是自己，直接用本地存的名字；如果是别人，调用接口去查真实名字
-					let name = (mid == config.user.mid) ? config.user.uname : await getTargetName(mid);
+					// 核心修改：使用最稳妥的 if-else 展开写法，完美兼容所有 JS 引擎
+					let name = "";
+					if (mid == config.user.mid) {
+						name = config.user.uname;
+					} else {
+						name = await getTargetName(mid);
+					}
+					
 					let targetDisplay = `${name}|${mid}`;
 					
-					$.log(`⭕ 为 [${targetDisplay}] 充电成功 ~`)
-					chargeMessage = `⭕ 为 [${targetDisplay}] 充电成功 ~\n`; 
+					$.log(`⭕ 为[${targetDisplay}]充电成功 ~`);
+					chargeMessage = `⭕ 为[${targetDisplay}]充电成功 ~\n`; 
 				} else if (body?.data?.status === -4) {
 					$.log("❌ 充电失败, B币不足")
 					chargeMessage = `自动充电: B币不足 ❌\n`; 
