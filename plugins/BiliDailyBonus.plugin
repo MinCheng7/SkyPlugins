@@ -1,9 +1,9 @@
 #!name=BiliDailyBonus
 #!desc=哔哩哔哩每日签到和大会员任务
 #!author=MinCheng7[https://github.com/MinCheng7], ClydeTime[https://github.com/ClydeTime]  
-#!作者=MinCheng7[https://github.com/MinCheng7], ClydeTime[https://github.com/ClydeTime]
-#!homepage=https://github.com/MinCheng7/SkyPlugins
+#!homepage=https://github.com/MinCheng7/SkyPlugins/blob/main/plugins/BiliDailyBonus.plugin
 #!icon=https://raw.githubusercontent.com/MinCheng7/icons/refs/heads/main/logo/2233-2.jpg
+#!tag=签到,哔哩哔哩,bilibili,cookie
 
 [Argument]
 bili = switch,false,tag=二维码Cookie,desc=是否启用此处修改
