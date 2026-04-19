@@ -1071,7 +1071,7 @@ async function Charge(mid, bp_num) {
 		body: $.queryStr(body)
 	}
 
-	return await $.fetch(myRequest).then(response => {
+	return await $.fetch(myRequest).then(async response => {
 		try {
 			const body = $.toObj(response.body)
 			if (body?.code === 0) {
