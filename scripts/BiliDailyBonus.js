@@ -174,7 +174,7 @@ async function signBiliBili() {
 			}
 			
 			// 新增：在投币结束后打印剩余数量
-			$.log(`  🪙 硬币剩余数量: ${Math.floor(config.user.money)}`)
+			$.log(`🪙 硬币剩余数量: ${Math.floor(config.user.money)}`)
 			
 			$.log("\n---- ⭕ 经验值任务已完成 ----\n")
 		} else {
