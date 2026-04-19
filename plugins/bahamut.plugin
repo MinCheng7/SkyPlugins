@@ -1,9 +1,9 @@
 #!name=巴哈姆特每日签到
 #!desc=自动完成巴哈姆特主站签到、公会签到及动画疯答题。请在插件内配置账号信息及任务开关。
 #!author=MinCheng7[https://github.com/MinCheng7]
-#!homepage= https://github.com/MinCheng7/SkyPlugins
+#!homepage= https://github.com/MinCheng7/SkyPlugins/blob/main/plugins/bahamut.plugin
 #!icon=https://raw.githubusercontent.com/MinCheng7/icons/refs/heads/main/logo/bahamut.png
-#!tag=签到
+#!tag=签到,巴哈姆特
 
 [Argument]
 # 运行时间设置
