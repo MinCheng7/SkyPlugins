@@ -1086,8 +1086,11 @@ async function Charge(mid, bp_num) {
 					
 					let targetDisplay = `${name}|${mid}`;
 					
-					$.log(`⭕ 为[${targetDisplay}]充电成功 ~`);
-					chargeMessage = `⭕ 为[${targetDisplay}]充电成功 ~\n`; 
+					// 核心优化：计算并显示剩余 B 币数
+					let remainingBCoin = currentBCoin - bpToCharge;
+					
+					$.log(`⭕ 为 [${targetDisplay}] 充电成功 ~ 剩余${remainingBCoin}个B币`);
+					chargeMessage = `⭕ 为 [${targetDisplay}] 充电成功 ~ 剩余${remainingBCoin}个B币\n`; 
 				} else if (body?.data?.status === -4) {
 					$.log("❌ 充电失败, B币不足")
 					chargeMessage = `自动充电: B币不足 ❌\n`; 
