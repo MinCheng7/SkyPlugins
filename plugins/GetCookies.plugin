@@ -1,9 +1,10 @@
 #!name=GetCookies
-#!desc=获取多个应用Cookie的插件，按需开启，获取完成后关闭。使用方法在各个脚本文件中都有说明。请勿把个人Cookie告知他人。更新日期：2026/04/16
+#!desc=获取多个应用Cookie的插件，按需开启，获取完成后关闭。使用方法在各个脚本文件中都有说明。请勿把个人Cookie告知他人。更新日期：2026/04/19
 #!author=MinCheng7[https://github.com/MinCheng7]
 #!homepage=https://github.com/MinCheng7/SkyPlugins
 #!icon=https://raw.githubusercontent.com/MinCheng7/icons/refs/heads/main/logo/cookie2.webp
 #!edit=https://github.com/MinCheng7/SkyPlugins/edit/main/GetCookies.plugin
+#!tag=cookie,百度贴吧,哔哩哔哩,bilibili,华住会,什么值得买,携程旅行
 
 [Argument]
 bdtb = switch,false,tag=[百度贴吧] @blackmatrix7,desc=是否启用此处修改
