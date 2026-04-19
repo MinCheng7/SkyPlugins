@@ -1084,7 +1084,7 @@ async function Charge(mid, bp_num) {
 						name = await getTargetName(mid);
 					}
 					
-					let targetDisplay = `${name}|${mid}`;
+					let targetDisplay = `${name}`;
 					
 					// 核心优化：计算并显示剩余 B 币数
 					let remainingBCoin = currentBCoin - bpToCharge;
@@ -1095,7 +1095,7 @@ async function Charge(mid, bp_num) {
 					$.log("❌ 充电失败, B币不足")
 					chargeMessage = `自动充电: B币不足 ❌\n`; 
 				} else {
-					// 核心修改：不要再打印毫无意义的 "0"！去 data 里面提取 B 站真正返回的交易失败原因
+					// 核心修改：去 data 里面提取 B 站真正返回的交易失败原因
 					let realError = body?.data?.error_msg || body?.data?.msg || `未知交易状态码: ${body?.data?.status}`;
 					
 					$.log(`❌ 充电失败，${realError}`)
