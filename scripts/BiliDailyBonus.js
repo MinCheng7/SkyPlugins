@@ -1095,8 +1095,11 @@ async function Charge(mid, bp_num) {
 					$.log("❌ 充电失败, B币不足")
 					chargeMessage = `自动充电: B币不足 ❌\n`; 
 				} else {
-					$.log("❌ 充电失败，" + body?.message)
-					chargeMessage = `自动充电: ${body.message} ❌\n`; 
+					// 核心修改：去 data 里面提取 B 站真正返回的交易失败原因
+					let realError = body?.data?.error_msg || body?.data?.msg || `未知交易状态码: ${body?.data?.status}`;
+					
+					$.log(`❌ 充电失败，${realError}`)
+					chargeMessage = `自动充电: ${realError} ❌\n`; 
 				}
 			} else {
 				$.log("❌ 充电失败，" + body?.message)
