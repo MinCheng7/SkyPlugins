@@ -2,7 +2,7 @@
 Function: 什么值得买cookie获取和自动签到
 Author: @MinCheng7
 Original author: @chavyleung & @fmz200
-更新日期：2026-04-16
+更新日期：2026-04-20
 使用方法：
 1. 获取Cookie：进入什么值得买app，进入APP“我的-头像”即可获取cookie。
 2. 签到任务：配置 Cron 定时任务即可自动执行。
@@ -47,13 +47,13 @@ if (typeof $request !== 'undefined') {
     }
 
     // 开始执行签到
-    await signweb();
-    await $.wait(1000);
-    // await signapp(); // APP签到依然保持注释状态
+    //await signweb();
+    //await $.wait(1000);
+    await signapp(); // APP签到依然保持注释状态
     await showmsg();
 
-    // 如果刚刚签到成功，把今天的日期存进缓存，作为下次的判断依据
-    if ($.web && $.web.error_code === 0) {
+    // 如果刚刚签到成功，把今天的日期存进缓存，作为下次的判断依据 (改为判断 $.app)
+    if ($.app && $.app.error_code === 0) {
       $.setdata(today, 'mincheng7_smzdm_last_sign');
     }
   })()
@@ -201,11 +201,16 @@ function showmsg() {
   return new Promise((resolve) => {
     $.subt = ''
     $.desc = []
-    $.subt = $.web.error_code === 0 ? 'PC端 签到成功✅' : $.web.error_code === 99 ? 'PC: 未登录❗' : 'PC: 签到失败❌'
-    if ($.web.error_code === 0 && $.web.data) {
-      $.desc.push(`累计签到: ${$.web.data.checkin_num}天, 经验: ${$.web.data.exp}, 金币: ${$.web.data.gold}, 积分: ${$.web.data.point}`)
-    } else if ($.web.error_msg) {
-      $.desc.push(`PC端提示: ${$.web.error_msg}`)
+    
+    // 核心修改：全面改为读取 $.app 的数据状态
+    $.subt = $.app.error_code === 0 ? 'APP端 签到成功✅' : $.app.error_code === 99 ? 'APP: 未登录❗' : 'APP: 签到失败❌'
+    
+    if ($.app.error_code === 0 && $.app.data) {
+      // 适配 APP 端特有的字段名 (daily_num)
+      let checkinNum = $.app.data.daily_num || $.app.data.checkin_num || "未知";
+      $.desc.push(`累计签到: ${checkinNum}天 🎉`);
+    } else if ($.app.error_msg) {
+      $.desc.push(`APP端提示: ${$.app.error_msg}`);
     }
     
     $.msg($.name, $.subt, $.desc.join('\n'))
