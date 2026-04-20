@@ -1,5 +1,5 @@
 #!name=巴哈姆特每日签到
-#!desc=自动完成巴哈姆特主站签到、公会签到及动画疯答题。请在插件内配置账号信息及任务开关。
+#!desc=自动完成巴哈姆特主站签到、公会签到及动画疯答题。请在插件内配置账号信息及任务开关。运行时间尽量避开整点，以免触发巴哈姆特反爬虫机制。
 #!author=MinCheng7[https://github.com/MinCheng7]
 #!homepage= https://github.com/MinCheng7/SkyPlugins/blob/main/plugins/bahamut.plugin
 #!icon=https://raw.githubusercontent.com/MinCheng7/icons/refs/heads/main/logo/bahamut.png
@@ -7,7 +7,7 @@
 
 [Argument]
 # 运行时间设置
-RunTime = input, "0 10 * * *", tag=脚本执行时间, desc=请填写标准的 Cron 表达式。默认每天上午 10:00 执行（建议不要在凌晨，以免获取不到动画疯答案）。
+RunTime = input, "23 7 * * *", tag=脚本执行时间, desc=请填写标准的 Cron 表达式。默认每天上午7:23执行（建议不要在凌晨，以免获取不到动画疯答案）。
 
 # 账号密码设置
 BahaUID = input, "", tag=用户名, desc=请填写您的巴哈姆特账号。
