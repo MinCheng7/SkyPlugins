@@ -2,10 +2,13 @@
 Function: 什么值得买cookie获取和自动签到
 Author: @MinCheng7
 Original author: @chavyleung & @fmz200
-update：2026-04-20-1631
+update：2026-04-20-1744
 使用方法：
-1. 获取Cookie：进入什么值得买app，进入APP“我的-头像”即可获取cookie。
-2. 签到任务：配置 Cron 定时任务即可自动执行。
+Ⅰ. 获取Cookie：打开手机的 Safari 浏览器，访问什么值得买的主页：https://www.smzdm.com；
+    网页打开后，点击浏览器底部的 大小（Aa）按钮，选择 “请求桌面网站”；
+    网页变成电脑版样式后，点击右上角的 “登录”，输入账号密码（或者验证码）完成登录即可自动获取cookie；
+    获取完成后手动签到一次，解除网页端的签到验证。
+Ⅱ. 签到任务：配置 Cron 定时任务即可自动执行。
 */
 
 // ================= CryptoJS 核心依赖 (折叠) =================
@@ -22,7 +25,7 @@ const $ = new Env('什么值得买');
 
 // 核心判断入口：通过是否有 $request 来区分是“获取Cookie”还是“签到任务”
 if (typeof $request !== 'undefined') {
-  // ========== 1. 获取 Cookie 逻辑 ==========
+  // ========== 1. 获取 Cookie 逻辑 ==========z
   getCookie();
 } else {
   // ========== 2. 自动签到逻辑 ==========
