@@ -71,20 +71,28 @@ function getCookie() {
   const req_headers = $request.headers;
 
   try {
-    // 核心修复 1：过滤掉静态资源文件 (图片/css/js)，防止无意义的频繁拦截
+    // 过滤掉静态资源文件 (图片/css/js)
     if (!req_url.match(/\.(css|js|png|jpg|jpeg|gif|svg|woff|ico)/i) && (req_url.includes("zhiyou.smzdm.com") || req_url.includes("www.smzdm.com"))) {
       const cookie = req_headers['Cookie'] || req_headers['cookie'];
       
       if (cookie && cookie.includes('sess=')) {
+          // 提取最新的 sess 核心令牌
+          let sessMatch = cookie.match(/sess=([^;]+)/);
+          let currentSess = sessMatch ? sessMatch[1] : null;
+
+          // 提取账号 ID
           let regex = /smzdm_id=(\d+)/;
           let match = cookie.match(regex);
           let smzdm_id = match ? match[1] : "Web端账号";
           
-          // 🌟 核心修复 2：去重逻辑。读取刚才存的旧 Cookie，比对是否与本次完全相同
-          let oldCookie = $.getdata('SMZDM_COOKIE');
+          // 读取刚才存的旧 Cookie，并提取出旧的 sess
+          let oldCookie = $.getdata('SMZDM_COOKIE') || "";
+          let oldSessMatch = oldCookie.match(/sess=([^;]+)/);
+          let oldSess = oldSessMatch ? oldSessMatch[1] : null;
           
-          if (oldCookie !== cookie) {
-              console.log("获取到的 Web 端 Cookie：" + cookie);
+          // 🌟 终极核心修复：只比对 sess 令牌！如果 sess 没变，说明是同一次登录的并发请求，静默处理！
+          if (currentSess && currentSess !== oldSess) {
+              console.log("获取到的 Web 端全新 Cookie：" + cookie);
 
               let cache = $.getdata("mincheng7_smzdm_cookie") || "[]";
               let json_data = JSON.parse(cache);
@@ -94,17 +102,15 @@ function getCookie() {
               $.setdata(cookie, 'SMZDM_COOKIE');
               $.setdata(cacheValue, 'mincheng7_smzdm_cookie');
               
-              // 只有当这是一个全新的 Cookie 时，才发送成功通知
+              // 只有当这是一个全新的账号或重新登录时，才发送成功通知
               $.msg('什么值得买', '获取 Web 端 Cookie 成功 ✅', "账号: " + smzdm_id + "\n现在可以去 Loon 关闭获取脚本了！");
           } else {
-              // 如果完全相同，说明是浏览器的并发子请求，静默处理不弹窗
-              console.log("检测到并发重复请求，Cookie未变，静默放行");
+              console.log("sess 令牌未变化，静默放行并发请求");
           }
       }
     }
   } catch (e) {
     console.log('脚本运行出现错误：' + e.message);
-    $.msg('什么值得买', '获取Cookie脚本运行出现错误❗️', e.message);
   }
 
   // 释放请求，完美无损放行网页数据
