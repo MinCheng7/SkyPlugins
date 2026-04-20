@@ -2,7 +2,7 @@
 Function: 什么值得买cookie获取和自动签到
 Author: @MinCheng7
 Original author: @chavyleung & @fmz200
-更新日期：2026-04-20
+更新日期：2026-04-20-16-10
 使用方法：
 1. 获取Cookie：进入什么值得买app，进入APP“我的-头像”即可获取cookie。
 2. 签到任务：配置 Cron 定时任务即可自动执行。
@@ -71,40 +71,42 @@ function getCookie() {
   const req_headers = $request.headers;
 
   try {
-    if (req_url.includes("/user-api.smzdm.com/users/info")) {
+    // 核心修改 1：拦截目标改为 Web 端的主要域名
+    if (req_url.includes("zhiyou.smzdm.com") || req_url.includes("www.smzdm.com")) {
       const cookie = req_headers['Cookie'] || req_headers['cookie'];
       
-      // 匹配smzdm_id
-      let regex = /smzdm_id=(\d+)/;
-      let match = cookie.match(regex);
-      let smzdm_id = match ? match[1] : "";
-      
-      console.log(smzdm_id + " 获取到的Cookie：" + cookie);
+      // 核心修改 2：严谨判断，只有包含了 sess 核心令牌的 Cookie 才抓取，屏蔽网页上的无用碎请求
+      if (cookie && cookie.includes('sess=')) {
+          // 匹配smzdm_id (Web 端的 Cookie 有时没有直接暴露 ID，这里做个兜底)
+          let regex = /smzdm_id=(\d+)/;
+          let match = cookie.match(regex);
+          let smzdm_id = match ? match[1] : "Web端账号";
+          
+          console.log("获取到的 Web 端 Cookie：" + cookie);
 
-      // 使用 Env 通用方法读取缓存
-      let cache = $.getdata("mincheng7_smzdm_cookie") || "[]";
-      let json_data = JSON.parse(cache);
-      
-      updateOrAddObject(json_data, "smzdm_id", smzdm_id, "cookie", cookie);
-      const cacheValue = JSON.stringify(json_data, null, "\t");
+          // 读取、更新并写入缓存
+          let cache = $.getdata("mincheng7_smzdm_cookie") || "[]";
+          let json_data = JSON.parse(cache);
+          updateOrAddObject(json_data, "smzdm_id", smzdm_id, "cookie", cookie);
+          const cacheValue = JSON.stringify(json_data, null, "\t");
 
-      // 使用 Env 通用方法写入缓存
-      $.setdata(cookie, 'SMZDM_COOKIE');
-      $.setdata(cacheValue, 'mincheng7_smzdm_cookie');
-      
-      // 发送通知
-      $.msg('什么值得买 获取cookie成功✅', "", "账号ID: " + smzdm_id);
+          $.setdata(cookie, 'SMZDM_COOKIE');
+          $.setdata(cacheValue, 'mincheng7_smzdm_cookie');
+          
+          // 发送成功通知
+          $.msg('什么值得买', '获取 Web 端 Cookie 成功 ✅', "账号: " + smzdm_id + "\n现在可以去 Loon 关闭获取脚本了！");
+      }
     }
   } catch (e) {
     console.log('脚本运行出现错误：' + e.message);
     $.msg('什么值得买', '获取Cookie脚本运行出现错误❗️', e.message);
   }
 
-  // 核心修复：完美释放请求或响应，绝不破坏原有数据，解决 APP 页面白屏报错
+  // 释放请求，完美无损放行网页数据
   if (typeof $response !== 'undefined') {
-      $.done($response); // 原样放行响应数据
+      $.done($response); 
   } else if (typeof $request !== 'undefined') {
-      $.done($request);  // 原样放行请求数据
+      $.done($request);  
   } else {
       $.done();
   }
