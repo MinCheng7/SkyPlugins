@@ -47,13 +47,12 @@ if (typeof $request !== 'undefined') {
     }
 
     // 开始执行签到
-    //await signweb();
-    //await $.wait(1000);
-    await signapp(); // APP签到依然保持注释状态
+    await signweb();
+    //await signapp();
     await showmsg();
 
-    // 如果刚刚签到成功，把今天的日期存进缓存，作为下次的判断依据 (改为判断 $.app)
-    if ($.app && $.app.error_code === 0) {
+    // 如果刚刚签到成功，把今天的日期存进缓存
+    if ($.web && $.web.error_code === 0) {
       $.setdata(today, 'mincheng7_smzdm_last_sign');
     }
   })()
@@ -143,17 +142,21 @@ function updateOrAddObject(collection, ...args) {
 
 function signweb() {
   return new Promise((resove) => {
-    const url = { url: 'https://zhiyou.smzdm.com/user/checkin/jsonp_checkin', headers: {} }
-    url.headers['Cookie'] = $.VAL_cookies
-    url.headers['Referer'] = 'https://www.smzdm.com/' // 换成https
-    // 换上最新的浏览器伪装 (User-Agent)
-    url.headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    const url = { 
+        url: 'https://zhiyou.smzdm.com/user/checkin/jsonp_checkin', 
+        headers: {
+            'Cookie': $.VAL_cookies,
+            'Referer': 'https://www.smzdm.com/',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
+        } 
+    }
     $.get(url, (err, resp, data) => {
       try {
-        $.web = JSON.parse(data)
+        $.log("\n🔍 【Web端诊断】服务器原始返回数据：" + data);
+        $.web = JSON.parse(data);
       } catch (e) {
-        $.log("【Web端】签到被拦截！返回内容：" + (data ? data.substring(0, 100) : '空'));
-        $.web = { error_code: -1, error_msg: "数据解析失败(可能被拦截)" };
+        $.log("\n❌ 【Web端诊断】数据解析失败！");
+        $.web = { error_code: -1, error_msg: data || "请求被拦截或网络异常" };
       } finally {
         resove()
       }
@@ -209,22 +212,19 @@ function getBody() {
 
 function showmsg() {
   return new Promise((resolve) => {
-    $.subt = ''
-    $.desc = []
+    $.subt = '';
+    $.desc = [];
     
-    // 新增防护：无论上方发生什么极端情况，确保 appData 绝对是一个对象
-    let appData = $.app || { error_code: -1, error_msg: "未知网络异常或数据为空" };
+    let webData = $.web || { error_code: -1, error_msg: "未知网络异常" };
 
-    // 核心修改：全面改为读取 appData 的数据状态
-    $.subt = appData.error_code === 0 ? 'APP端 签到成功✅' : appData.error_code === 99 ? 'APP: 未登录❗' : 'APP: 签到失败❌'
+    $.subt = webData.error_code === 0 ? 'PC端 签到成功✅' : webData.error_code === 99 ? 'PC端: 未登录❗' : 'PC端: 签到失败❌'
     
-    if (appData.error_code === 0 && appData.data) {
-      let checkinNum = appData.data.daily_num || appData.data.checkin_num || "未知";
-      $.desc.push(`累计签到: ${checkinNum}天 🎉`);
-    } else if (appData.error_msg) {
-      $.desc.push(`APP端提示: ${appData.error_msg}`);
+    if (webData.error_code === 0 && webData.data) {
+      $.desc.push(`累计签到: ${webData.data.checkin_num}天, 经验: ${webData.data.exp}, 金币: ${webData.data.gold}`);
+    } else if (webData.error_msg) {
+      $.desc.push(`PC端失败原因: ${webData.error_msg}`);
     } else {
-      $.desc.push(`返回状态码: ${appData.error_code}`);
+      $.desc.push(`错误码: ${webData.error_code}`);
     }
     
     $.msg($.name, $.subt, $.desc.join('\n'))
