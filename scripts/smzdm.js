@@ -2,7 +2,7 @@
 Function: 什么值得买cookie获取和自动签到
 Author: @MinCheng7
 Original author: @chavyleung & @fmz200
-更新日期：2026-04-20-1621
+update：2026-04-20-1631
 使用方法：
 1. 获取Cookie：进入什么值得买app，进入APP“我的-头像”即可获取cookie。
 2. 签到任务：配置 Cron 定时任务即可自动执行。
