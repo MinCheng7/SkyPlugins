@@ -2,7 +2,7 @@
 Function: 什么值得买cookie获取和自动签到
 Author: @MinCheng7
 Original author: @chavyleung & @fmz200
-更新日期：2026-04-16
+更新日期：2026-04-20
 使用方法：
 1. 获取Cookie：进入什么值得买app，进入APP“我的-头像”即可获取cookie。
 2. 签到任务：配置 Cron 定时任务即可自动执行。
@@ -101,8 +101,14 @@ function getCookie() {
     $.msg('什么值得买', '获取Cookie脚本运行出现错误❗️', e.message);
   }
 
-  // 释放请求，让APP正常加载
-  $.done({});
+  // 核心修复：完美释放请求或响应，绝不破坏原有数据，解决 APP 页面白屏报错
+  if (typeof $response !== 'undefined') {
+      $.done($response); // 原样放行响应数据
+  } else if (typeof $request !== 'undefined') {
+      $.done($request);  // 原样放行请求数据
+  } else {
+      $.done();
+  }
 }
 
 /**
