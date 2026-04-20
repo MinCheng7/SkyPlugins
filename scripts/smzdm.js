@@ -2,7 +2,7 @@
 Function: 什么值得买cookie获取和自动签到
 Author: @MinCheng7
 Original author: @chavyleung & @fmz200
-更新日期：2026-04-20-16-10
+更新日期：2026-04-20-1621
 使用方法：
 1. 获取Cookie：进入什么值得买app，进入APP“我的-头像”即可获取cookie。
 2. 签到任务：配置 Cron 定时任务即可自动执行。
@@ -71,30 +71,35 @@ function getCookie() {
   const req_headers = $request.headers;
 
   try {
-    // 核心修改 1：拦截目标改为 Web 端的主要域名
-    if (req_url.includes("zhiyou.smzdm.com") || req_url.includes("www.smzdm.com")) {
+    // 核心修复 1：过滤掉静态资源文件 (图片/css/js)，防止无意义的频繁拦截
+    if (!req_url.match(/\.(css|js|png|jpg|jpeg|gif|svg|woff|ico)/i) && (req_url.includes("zhiyou.smzdm.com") || req_url.includes("www.smzdm.com"))) {
       const cookie = req_headers['Cookie'] || req_headers['cookie'];
       
-      // 核心修改 2：严谨判断，只有包含了 sess 核心令牌的 Cookie 才抓取，屏蔽网页上的无用碎请求
       if (cookie && cookie.includes('sess=')) {
-          // 匹配smzdm_id (Web 端的 Cookie 有时没有直接暴露 ID，这里做个兜底)
           let regex = /smzdm_id=(\d+)/;
           let match = cookie.match(regex);
           let smzdm_id = match ? match[1] : "Web端账号";
           
-          console.log("获取到的 Web 端 Cookie：" + cookie);
-
-          // 读取、更新并写入缓存
-          let cache = $.getdata("mincheng7_smzdm_cookie") || "[]";
-          let json_data = JSON.parse(cache);
-          updateOrAddObject(json_data, "smzdm_id", smzdm_id, "cookie", cookie);
-          const cacheValue = JSON.stringify(json_data, null, "\t");
-
-          $.setdata(cookie, 'SMZDM_COOKIE');
-          $.setdata(cacheValue, 'mincheng7_smzdm_cookie');
+          // 🌟 核心修复 2：去重逻辑。读取刚才存的旧 Cookie，比对是否与本次完全相同
+          let oldCookie = $.getdata('SMZDM_COOKIE');
           
-          // 发送成功通知
-          $.msg('什么值得买', '获取 Web 端 Cookie 成功 ✅', "账号: " + smzdm_id + "\n现在可以去 Loon 关闭获取脚本了！");
+          if (oldCookie !== cookie) {
+              console.log("获取到的 Web 端 Cookie：" + cookie);
+
+              let cache = $.getdata("mincheng7_smzdm_cookie") || "[]";
+              let json_data = JSON.parse(cache);
+              updateOrAddObject(json_data, "smzdm_id", smzdm_id, "cookie", cookie);
+              const cacheValue = JSON.stringify(json_data, null, "\t");
+
+              $.setdata(cookie, 'SMZDM_COOKIE');
+              $.setdata(cacheValue, 'mincheng7_smzdm_cookie');
+              
+              // 只有当这是一个全新的 Cookie 时，才发送成功通知
+              $.msg('什么值得买', '获取 Web 端 Cookie 成功 ✅', "账号: " + smzdm_id + "\n现在可以去 Loon 关闭获取脚本了！");
+          } else {
+              // 如果完全相同，说明是浏览器的并发子请求，静默处理不弹窗
+              console.log("检测到并发重复请求，Cookie未变，静默放行");
+          }
       }
     }
   } catch (e) {
@@ -148,8 +153,13 @@ function signweb() {
         url: 'https://zhiyou.smzdm.com/user/checkin/jsonp_checkin', 
         headers: {
             'Cookie': $.VAL_cookies,
-            'Referer': 'https://www.smzdm.com/',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
+            // 核心修复 1：更精准的来源页伪装
+            'Referer': 'https://zhiyou.smzdm.com/user',
+            'Accept': '*/*',
+            'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
+            'Connection': 'keep-alive',
+            // 核心修复 2：完美伪装成 Mac Safari 桌面版，与你获取 Cookie 的手机桌面版模式完全一致
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Safari/605.1.15'
         } 
     }
     $.get(url, (err, resp, data) => {
