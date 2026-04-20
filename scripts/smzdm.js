@@ -2,7 +2,7 @@
 Function: 什么值得买cookie获取和自动签到
 Author: @MinCheng7
 Original author: @chavyleung & @fmz200
-更新日期：2026-04-20
+更新日期：2026-04-16
 使用方法：
 1. 获取Cookie：进入什么值得买app，进入APP“我的-头像”即可获取cookie。
 2. 签到任务：配置 Cron 定时任务即可自动执行。
@@ -157,7 +157,7 @@ function signweb() {
 
 function signapp() {
   const body = getBody()
-  return new Promise((resove) => {
+  return new Promise((resolve) => { // 修复了原版的拼写错误 resove -> resolve
     const url = {
       url: 'https://user-api.smzdm.com/checkin',
       body,
@@ -169,19 +169,23 @@ function signapp() {
     }
     $.post(url, (err, resp, data) => {
       try {
-        $.app = JSON.parse(data)
+        // 核心修复：强制校验，如果解析出来是 null，立刻抛出错误进入 catch
+        let parsedData = JSON.parse(data);
+        if (!parsedData) throw new Error("服务器返回了空数据");
+        $.app = parsedData;
       } catch (e) {
-        $.log("【APP端】签到被拦截！返回内容：" + (data ? data.substring(0, 100) : '空'));
-        $.app = { error_code: '-1', error_msg: "数据解析失败(签名可能已失效)" };
+        $.log("【APP端】签到请求异常！返回内容：" + (data ? String(data).substring(0, 100) : '空'));
+        $.app = { error_code: -1, error_msg: "数据解析失败 (可能是签名失效或Cookie过期)" };
       } finally {
-        resove()
+        resolve()
       }
     })
   })
 }
 
 function getToken() {
-  const match = $.VAL_cookies.match(/sess=(.*?);/);
+  // 核心修复：去掉末尾的强制分号要求，防止 sess 在最后一位时提取失败
+  const match = $.VAL_cookies.match(/sess=([^;]+)/);
   return match ? match[1] : ''; 
 }
 
@@ -202,15 +206,19 @@ function showmsg() {
     $.subt = ''
     $.desc = []
     
-    // 核心修改：全面改为读取 $.app 的数据状态
-    $.subt = $.app.error_code === 0 ? 'APP端 签到成功✅' : $.app.error_code === 99 ? 'APP: 未登录❗' : 'APP: 签到失败❌'
+    // 新增防护：无论上方发生什么极端情况，确保 appData 绝对是一个对象
+    let appData = $.app || { error_code: -1, error_msg: "未知网络异常或数据为空" };
+
+    // 核心修改：全面改为读取 appData 的数据状态
+    $.subt = appData.error_code === 0 ? 'APP端 签到成功✅' : appData.error_code === 99 ? 'APP: 未登录❗' : 'APP: 签到失败❌'
     
-    if ($.app.error_code === 0 && $.app.data) {
-      // 适配 APP 端特有的字段名 (daily_num)
-      let checkinNum = $.app.data.daily_num || $.app.data.checkin_num || "未知";
+    if (appData.error_code === 0 && appData.data) {
+      let checkinNum = appData.data.daily_num || appData.data.checkin_num || "未知";
       $.desc.push(`累计签到: ${checkinNum}天 🎉`);
-    } else if ($.app.error_msg) {
-      $.desc.push(`APP端提示: ${$.app.error_msg}`);
+    } else if (appData.error_msg) {
+      $.desc.push(`APP端提示: ${appData.error_msg}`);
+    } else {
+      $.desc.push(`返回状态码: ${appData.error_code}`);
     }
     
     $.msg($.name, $.subt, $.desc.join('\n'))
