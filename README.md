@@ -19,7 +19,9 @@ Fork from：[NobyDa](https://github.com/clydetime)，Loon插件地址：[Bahamut
 修改内容：直接在插件内配置丨更改通知样式
 
 # 签到脚本合集
-包含百度贴吧，巴哈姆特，华住会，携程旅行，~~什么值得买~~（已放弃，人机验证太麻烦）。在Loon中添加脚本订阅后，按需启用脚本。
+脚本地址：[DailySign](https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/plugins/DailySign.plugin)
+
+包含百度贴吧，~~巴哈姆特~~（已添加至巴哈姆特签到插件内），华住会，携程旅行，~~什么值得买~~（已放弃，人机验证太麻烦）。在Loon中添加脚本订阅后，按需启用脚本。
 
 
 
