@@ -1,0 +1,19 @@
+#!name=网上国网
+#!desc=用电情况查询
+#!author=𝐎𝐍𝐙𝟑𝐕[https://t.me/onz3v_channel], MinCheng7[https://github.com/MinCheng7]
+#!icon=https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/83/d8/8a/83d88a92-5a4d-7a2f-118c-80d795e7a9f6/AppIcon-0-0-1x_U007emarketing-0-5-0-0-sRGB-85-220.png/144x144.png
+#!tag=通用重写,网上国网
+
+[Argument]
+sgcc_enable=swirch,"true","false",tag=重写开关, desc=是否开启接口重写
+username=input,"",tag=登录账号, desc= "https://95598.cn" 或 "网上国网App"的登录账号
+password=input,"",tag=登录密码, desc=同账号
+debug=switch,"false","true",tag=是否开启调试模式, desc=是否开启调试模式
+show_recent_usage=switch,"false","true",tag=是否展示近期用量, desc=是否展示近期用量
+notify_all_accounts=switch,"false","true",tag=是否通知全部户号, desc=是否通知全部户号
+timeout=input,"60",tag=脚本运行最大时间, desc=脚本运行最大时间
+
+[Script]
+http-request ^https?:\/\/api\.wsgw-rewrite\.com\/electricity\/bill\/all script-path=https://raw.githubusercontent.com/Yuheng0101/X/main/Tasks/95598/95598.js, requires-body=true, timeout={timeout}, tag=网上国网接口重写, enable={sgcc_enable}
+
+hostname = api.wsgw-rewrite.com
