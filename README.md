@@ -18,6 +18,11 @@ Fork from：[NobyDa](https://github.com/clydetime)，Loon插件地址：[Bahamut
 
 修改内容：直接在插件内配置丨更改通知样式
 
+# 网上国网查询
+修改自：[𝐎𝐍𝐙𝟑𝐕](https://t.me/onz3v_channel)，仅取消cron定时任务
+
+Loon插件地址：[网上国网](https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/plugins/sgcc.plugin)
+
 # 签到脚本合集
 脚本地址：[DailySign](https://raw.githubusercontent.com/MinCheng7/SkyPlugins/refs/heads/main/plugins/DailySign.plugin)
 
